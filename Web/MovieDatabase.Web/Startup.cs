@@ -21,6 +21,8 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using MovieDatabase.Common.Settings;
+    using MovieDatabase.Services.Messaging.EmailSender;
 
     public class Startup
     {
@@ -79,7 +81,8 @@
                     options.MinimumSameSitePolicy = SameSiteMode.Lax;
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
-
+            
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddSingleton(this.configuration);
 
             // Data repositories
@@ -87,8 +90,7 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISmsSender, NullMessageSender>();
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
