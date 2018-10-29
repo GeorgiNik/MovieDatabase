@@ -3,26 +3,26 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class ExternalLoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationSignInManager<ApplicationUser> signInManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
         private readonly ILogger<ExternalLoginModel> logger;
 
         public ExternalLoginModel(
-            SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager,
+            ApplicationSignInManager<ApplicationUser> signInManager,
+            ApplicationUserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger)
         {
             this.signInManager = signInManager;

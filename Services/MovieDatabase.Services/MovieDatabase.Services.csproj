@@ -18,4 +18,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\MovieDatabase.Data.Models\MovieDatabase.Data.Models.csproj" />
+  </ItemGroup>
+
 </Project>

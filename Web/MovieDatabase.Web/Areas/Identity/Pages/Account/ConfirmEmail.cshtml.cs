@@ -3,21 +3,21 @@
     using System;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class ConfirmEmailModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
 
-        public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
+        public ConfirmEmailModel(ApplicationUserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
         }

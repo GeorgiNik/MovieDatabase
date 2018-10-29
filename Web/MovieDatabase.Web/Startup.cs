@@ -23,6 +23,7 @@
     using Microsoft.Extensions.Logging;
     using MovieDatabase.Common.Settings;
     using MovieDatabase.Services.Messaging.EmailSender;
+    using MovieDatabase.Services.Identity;
 
     public class Startup
     {
@@ -49,10 +50,16 @@
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.User.RequireUniqueEmail = true;
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromMinutes(30);
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
+                .AddUserManager<ApplicationUserManager<ApplicationUser>>()
+                .AddSignInManager<ApplicationSignInManager<ApplicationUser>>()
                 .AddDefaultTokenProviders();
 
             services
@@ -95,6 +102,8 @@
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
             services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
+
+            services.AddRouting(options => options.LowercaseUrls = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -136,6 +145,7 @@
 
             app.UseMvc(routes =>
             {
+                routes.MapRoute("admin", "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
                 routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
             });
         }

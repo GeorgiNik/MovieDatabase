@@ -45,6 +45,7 @@
         private static void SeedRoles(RoleManager<ApplicationRole> roleManager)
         {
             SeedRole(GlobalConstants.AdministratorRoleName, roleManager);
+            SeedRole(GlobalConstants.UserRoleName, roleManager);
         }
 
         private static void SeedRole(string roleName, RoleManager<ApplicationRole> roleManager)

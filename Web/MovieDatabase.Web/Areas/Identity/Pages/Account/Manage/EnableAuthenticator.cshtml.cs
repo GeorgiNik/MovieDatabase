@@ -5,13 +5,13 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Web.Areas.Identity.Pages.Account.Manage.InputModels;
-
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
+    using MovieDatabase.Web.Areas.Identity.Pages.Account.Manage.InputModels;
 
 #pragma warning disable SA1649 // File name should match first type name
     public class EnableAuthenticatorModel : PageModel
@@ -19,12 +19,12 @@
     {
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
         private readonly ILogger<EnableAuthenticatorModel> logger;
         private readonly UrlEncoder urlEncoder;
 
         public EnableAuthenticatorModel(
-            UserManager<ApplicationUser> userManager,
+            ApplicationUserManager<ApplicationUser> userManager,
             ILogger<EnableAuthenticatorModel> logger,
             UrlEncoder urlEncoder)
         {

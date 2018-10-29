@@ -1,0 +1,11 @@
+﻿@page
+@model ThankYouForRegisteringModel
+@{
+}
+
+<h1 class="heading">Thank you for registering</h1>
+<div class="row">
+    <div class="col-xs-12">
+        @Model.Output.Firstname @Model.Output.Lastname, thank you for registering with us! An email was sent to @Model.Output.Email with instructions on how to complete your registration.
+    </div>
+</div>

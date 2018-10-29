@@ -4,9 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Web.Areas.Identity.Pages.Account.InputModels;
-
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -14,15 +11,19 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
 
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
+    using MovieDatabase.Web.Areas.Identity.Pages.Account.InputModels;
+
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class LoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ApplicationSignInManager<ApplicationUser> signInManager;
         private readonly ILogger<LoginModel> logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(ApplicationSignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
         {
             this.signInManager = signInManager;
             this.logger = logger;
@@ -64,6 +65,7 @@
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await this.signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
+
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User logged in.");

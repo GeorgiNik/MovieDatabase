@@ -3,25 +3,25 @@
     using System;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Web.Areas.Identity.Pages.Account.Manage.InputModels;
-
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
+    using MovieDatabase.Web.Areas.Identity.Pages.Account.Manage.InputModels;
 
 #pragma warning disable SA1649 // File name should match first type name
     public class DeletePersonalDataModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
+        private readonly ApplicationSignInManager<ApplicationUser> signInManager;
         private readonly ILogger<DeletePersonalDataModel> logger;
 
         public DeletePersonalDataModel(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            ApplicationUserManager<ApplicationUser> userManager,
+            ApplicationSignInManager<ApplicationUser> signInManager,
             ILogger<DeletePersonalDataModel> logger)
         {
             this.userManager = userManager;

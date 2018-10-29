@@ -2,22 +2,22 @@
 {
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
 
 #pragma warning disable SA1649 // File name should match first type name
     public class PersonalDataModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
         private readonly ILogger<PersonalDataModel> logger;
 
         public PersonalDataModel(
-            UserManager<ApplicationUser> userManager,
+            ApplicationUserManager<ApplicationUser> userManager,
             ILogger<PersonalDataModel> logger)
         {
             this.userManager = userManager;

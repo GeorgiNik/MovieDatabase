@@ -3,24 +3,24 @@
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Web.Areas.Identity.Pages.Account.InputModels;
-
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
+    using MovieDatabase.Web.Areas.Identity.Pages.Account.InputModels;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class ForgotPasswordModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
         private readonly IEmailSender emailSender;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(ApplicationUserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.emailSender = emailSender;

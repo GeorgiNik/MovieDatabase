@@ -18,6 +18,12 @@ namespace MovieDatabase.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
+        public string Firstname { get; set; }
+
+        public string Lastname { get; set; }
+
+        public bool IsActive { get; set; }
+
         // Audit info
         public DateTime CreatedOn { get; set; }
 

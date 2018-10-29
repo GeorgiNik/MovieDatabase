@@ -6,12 +6,13 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
 
     using Newtonsoft.Json;
 
@@ -19,11 +20,11 @@
     public class DownloadPersonalDataModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly ApplicationUserManager<ApplicationUser> userManager;
         private readonly ILogger<DownloadPersonalDataModel> logger;
 
         public DownloadPersonalDataModel(
-            UserManager<ApplicationUser> userManager,
+            ApplicationUserManager<ApplicationUser> userManager,
             ILogger<DownloadPersonalDataModel> logger)
         {
             this.userManager = userManager;

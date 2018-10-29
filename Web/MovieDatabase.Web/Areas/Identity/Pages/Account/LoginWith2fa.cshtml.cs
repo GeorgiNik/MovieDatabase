@@ -3,24 +3,25 @@
     using System;
     using System.Threading.Tasks;
 
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Web.Areas.Identity.Pages.Account.InputModels;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
 
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Services.Identity;
+    using MovieDatabase.Web.Areas.Identity.Pages.Account.InputModels;
+
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class LoginWith2FaModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ApplicationSignInManager<ApplicationUser> signInManager;
         private readonly ILogger<LoginWith2FaModel> logger;
 
-        public LoginWith2FaModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginWith2FaModel> logger)
+        public LoginWith2FaModel(ApplicationSignInManager<ApplicationUser> signInManager, ILogger<LoginWith2FaModel> logger)
         {
             this.signInManager = signInManager;
             this.logger = logger;
