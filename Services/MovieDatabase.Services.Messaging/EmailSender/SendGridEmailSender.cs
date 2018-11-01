@@ -1,6 +1,11 @@
-﻿namespace MovieDatabase.Services.Messaging.EmailSender
+﻿using EmailAddress = SendGrid.Helpers.Mail.EmailAddress;
+using MailHelper = SendGrid.Helpers.Mail.MailHelper;
+using SendGridClient = SendGrid.SendGridClient;
+
+namespace MovieDatabase.Services.Messaging.EmailSender
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text;
@@ -19,7 +24,7 @@
 
         private readonly string fromAddress;
         private readonly string fromName;
-        private readonly HttpClient httpClient;
+        private readonly SendGridClient sendGridClient;
         private readonly ILogger logger;
 
         public SendGridEmailSender(ILoggerFactory loggerFactory, IOptions<EmailSettings> settings)
@@ -30,12 +35,9 @@
             }
 
             this.logger = loggerFactory.CreateLogger<SendGridEmailSender>();
-            this.httpClient = new HttpClient();
-            this.httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(SendGridEmailSender.AuthenticationScheme, settings.Value.ApiKey);
-            this.httpClient.BaseAddress = new Uri(settings.Value.ApiAdress);
             this.fromAddress = settings.Value.FromAddress;
             this.fromName = settings.Value.FromName;
+            this.sendGridClient = new SendGridClient(settings.Value.ApiKey);
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
@@ -55,23 +57,16 @@
                 throw new ArgumentException("Subject and/or message must be provided.");
             }
 
-            var msg = new SendGridMessage(
-                new SendGridEmail(email),
-                subject,
-                new SendGridEmail(this.fromAddress, this.fromName),
-                message);
             try
             {
-                var json = JsonConvert.SerializeObject(msg);
-                var response = await this.httpClient.PostAsync(
-                    SendGridEmailSender.SendEmailUrlPath,
-                    new StringContent(json, Encoding.UTF8, "application/json"));
-
-                if (!response.IsSuccessStatusCode)
+                var from = new EmailAddress(this.fromAddress, this.fromName);
+                var to = new EmailAddress(email);
+                var msg = MailHelper.CreateSingleEmail(from, to, subject,string.Empty, message);
+                var response = await this.sendGridClient.SendEmailAsync(msg);
+                
+                if (response.StatusCode != HttpStatusCode.OK || response.StatusCode != HttpStatusCode.Accepted)
                 {
-                    // See if we can read the response for more information, then log the error
-                    var errorJson = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"SendGrid indicated failure! Code: {response.StatusCode}, reason: {errorJson}");
+                    throw new Exception($"SendGrid indicated failure! Code: {response.StatusCode}, reason: {response.Body}");
                 }
             }
             catch (Exception ex)
