@@ -11,6 +11,7 @@
     using MovieDatabase.Data.Models;
     using MovieDatabase.Services.Identity;
     using MovieDatabase.Web.Areas.Identity.Pages.Account.Manage.InputModels;
+    using MovieDatabase.Web.Areas.Identity.Pages.Account.Manage.OutputModels;
 
 #pragma warning disable SA1649 // File name should match first type name
     public class IndexModel : PageModel
@@ -40,6 +41,8 @@
         [BindProperty]
         public IndexInputModel Input { get; set; }
 
+        public IndexOutputModel Output { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -56,8 +59,15 @@
 
             this.Input = new IndexInputModel
             {
+                PhoneNumber = phoneNumber,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname
+            };
+
+            this.Output = new IndexOutputModel
+            {
                 Email = email,
-                PhoneNumber = phoneNumber
+                RegisteredOn = user.CreatedOn.ToString("dd/MM/yyyy")
             };
 
             this.IsEmailConfirmed = await this.userManager.IsEmailConfirmedAsync(user);
@@ -78,17 +88,6 @@
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            var email = await this.userManager.GetEmailAsync(user);
-            if (this.Input.Email != email)
-            {
-                var setEmailResult = await this.userManager.SetEmailAsync(user, this.Input.Email);
-                if (!setEmailResult.Succeeded)
-                {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
-                }
-            }
-
             var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
             if (this.Input.PhoneNumber != phoneNumber)
             {
@@ -97,6 +96,28 @@
                 {
                     var userId = await this.userManager.GetUserIdAsync(user);
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                }
+            }
+
+            if (this.Input.Firstname != null && this.Input.Firstname != user.Firstname)
+            {
+                user.Firstname = this.Input.Firstname;
+                var updateResult = await this.userManager.UpdateAsync(user);
+
+                if (!updateResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred updating user first name with ID '{user.Id}'.");
+                }
+            }
+
+            if (this.Input.Lastname != null && this.Input.Lastname != user.Lastname)
+            {
+                user.Lastname = this.Input.Lastname;
+                var updateResult = await this.userManager.UpdateAsync(user);
+
+                if (!updateResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred updating user last name with ID '{user.Id}'.");
                 }
             }
 

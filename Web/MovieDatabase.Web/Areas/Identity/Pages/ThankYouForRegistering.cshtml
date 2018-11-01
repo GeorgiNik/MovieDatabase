@@ -1,11 +1,35 @@
 ﻿@page
 @model ThankYouForRegisteringModel
 @{
+    ViewData["Title"] = "Thank you for registering";
 }
 
-<h1 class="heading">Thank you for registering</h1>
-<div class="row">
-    <div class="col-xs-12">
-        @Model.Output.Firstname @Model.Output.Lastname, thank you for registering with us! An email was sent to @Model.Output.Email with instructions on how to complete your registration.
+@if (Model.Output.Resent)
+{
+    <div class="alert alert-alt alert-success mb alert-large fade in show-on-load" role="alert">
+        <div class="alert-body">
+            Email successfully resent
+        </div>
+    </div>
+}
+
+@if (Model.Output.SubsequentResend)
+{
+    <div class="alert alert-alt alert-danger mb alert-large fade in show-on-load" role="alert">
+        <div class="alert-body">
+            Please allow some time for the email to arrive. You can try resending the confirmation token in a few minutes.
+        </div>
+    </div>
+}
+
+<div class="panel panel-white panel-large">
+    <div class="panel-body pt-2x pb">
+
+        <h2>@ViewData["Title"]</h2>
+        <p>@Model.Output.Firstname @Model.Output.Lastname, thank you for registering with us! An email was sent to <strong>@Model.Output.Email</strong> with instructions on how to complete your registration.</p>
+
+        <div class="mt-2x">
+            Didn't receive an email? <a asp-page="./ThankYouForRegistering" asp-page-handler="Resend" asp-route-userId="@Model.Output.UserId">Resend confirmation email</a>
+        </div>
     </div>
 </div>

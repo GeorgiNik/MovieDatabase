@@ -2,15 +2,6 @@
 {
     using System.Reflection;
 
-    using MovieDatabase.Common.Mapping;
-    using MovieDatabase.Data;
-    using MovieDatabase.Data.Common.Repositories;
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Data.Repositories;
-    using MovieDatabase.Data.Seeding;
-    using MovieDatabase.Services.Messaging;
-    using MovieDatabase.Web.ViewModels.Account;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -21,9 +12,17 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Common.Mapping;
     using MovieDatabase.Common.Settings;
-    using MovieDatabase.Services.Messaging.EmailSender;
+    using MovieDatabase.Data;
+    using MovieDatabase.Data.Common.Repositories;
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Data.Repositories;
+    using MovieDatabase.Data.Seeding;
     using MovieDatabase.Services.Identity;
+    using MovieDatabase.Services.Messaging.EmailSender;
+    using MovieDatabase.Web.ViewModels.Account;
 
     public class Startup
     {
@@ -88,7 +87,12 @@
                     options.MinimumSameSitePolicy = SameSiteMode.Lax;
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
-            
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = System.TimeSpan.FromHours(1);
+            });
+
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddSingleton(this.configuration);
 

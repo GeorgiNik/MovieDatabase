@@ -39,8 +39,13 @@
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home", new { area = string.Empty });
+            }
+
             if (!string.IsNullOrEmpty(this.ErrorMessage))
             {
                 this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
@@ -54,6 +59,8 @@
             this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             this.ReturnUrl = returnUrl;
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -80,7 +87,9 @@
                 if (result.IsLockedOut)
                 {
                     this.logger.LogWarning("User account locked out.");
-                    return this.RedirectToPage("./Lockout");
+                    this.ModelState.AddModelError(string.Empty, "Your account has been disabled for 30 minutes. Please try again later or contact an administrator.");
+
+                    //return this.RedirectToPage("./Lockout");
                 }
                 else
                 {

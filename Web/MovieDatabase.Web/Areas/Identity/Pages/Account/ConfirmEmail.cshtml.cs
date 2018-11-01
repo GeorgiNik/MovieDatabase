@@ -35,6 +35,11 @@
                 return this.NotFound($"Unable to load user with ID '{userId}'.");
             }
 
+            if (user.EmailConfirmed)
+            {
+                throw new InvalidOperationException("email already confirmed");
+            }
+
             var result = await this.userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {

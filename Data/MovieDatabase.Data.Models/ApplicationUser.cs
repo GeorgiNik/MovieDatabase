@@ -4,9 +4,9 @@ namespace MovieDatabase.Data.Models
     using System;
     using System.Collections.Generic;
 
-    using MovieDatabase.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+
+    using MovieDatabase.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -23,6 +23,8 @@ namespace MovieDatabase.Data.Models
         public string Lastname { get; set; }
 
         public bool IsActive { get; set; }
+
+        public DateTimeOffset EmailConfirmationTokenResentSentOn { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }
