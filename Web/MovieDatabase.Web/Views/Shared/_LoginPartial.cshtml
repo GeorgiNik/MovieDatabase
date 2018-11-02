@@ -1,4 +1,6 @@
-﻿@using MovieDatabase.Data.Models
+﻿@using MovieDatabase.Common
+@using MovieDatabase.Data.Models
+
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -12,6 +14,11 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
+                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <li><a asp-area="Admin" asp-controller="Dashboard" title="Profile">To dashboard</a></li>
+                        <li role="separator" class="divider"></li>
+                    }
                     <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Profile">Profile</a></li>
                     <li role="separator" class="divider"></li>
                     <li><button type="submit" class="btn-link">Logout</button></li>
