@@ -145,7 +145,7 @@ body.main-body {
     padding-bottom: 165px;
 }
 
-    body.main-body .navbar {
+    body.main-body .navbar, body.dashb-01-expanded .navbar {
         padding-left: 15px;
         padding-right: 15px;
     }
@@ -231,3 +231,8 @@ body.main-body {
         text-align: center;
         font-size: 1.4rem;
     }
+
+
+.dashb-user .image.logo {
+    margin-bottom: 2rem;
+}
