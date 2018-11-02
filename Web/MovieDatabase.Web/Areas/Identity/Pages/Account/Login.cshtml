@@ -5,7 +5,9 @@
     ViewData["Title"] = "Sign in";
 }
 
-<div class="alert alert-alt alert-danger mb alert-small" role="alert" asp-validation-summary="All"></div>
+<div class="alert alert-alt alert-danger mb alert-small alert-dismissable alert-validation fade in" role="alert" asp-validation-summary="All">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+</div>
 
 <div class="panel panel-white panel-small">
     <div class="panel-body pt-2x pb">

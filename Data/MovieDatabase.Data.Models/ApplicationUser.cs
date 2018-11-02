@@ -24,7 +24,7 @@ namespace MovieDatabase.Data.Models
 
         public bool IsActive { get; set; }
 
-        public DateTimeOffset EmailConfirmationTokenResentSentOn { get; set; }
+        public DateTimeOffset EmailConfirmationTokenResentOn { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

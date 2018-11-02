@@ -37,7 +37,7 @@
         {
             ApplicationUser user = await this.GetUserAndLoadOutputModel(userId);
 
-            if (DateTimeOffset.UtcNow.Subtract(user.EmailConfirmationTokenResentSentOn).TotalMinutes < 5)
+            if (DateTimeOffset.UtcNow.Subtract(user.EmailConfirmationTokenResentOn).TotalMinutes < 5)
             {
                 this.Output.SubsequentResend = true;
 
@@ -59,7 +59,7 @@
             this.Output.Resent = true;
 
             // update the token resent on value, so it can be checked if more resends follow
-            var result = this.userManager.SetEmailConfirmationTokenResentOnAsync(userId);
+            var result = await this.userManager.SetEmailConfirmationTokenResentOnAsync(userId);
 
             return this.Page();
         }

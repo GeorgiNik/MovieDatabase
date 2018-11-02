@@ -98,7 +98,7 @@
                 throw new InvalidOperationException("user");
             }
 
-            user.EmailConfirmationTokenResentSentOn = DateTime.UtcNow;
+            user.EmailConfirmationTokenResentOn = DateTime.UtcNow;
 
             return await this.UpdateAsync(user);
         }

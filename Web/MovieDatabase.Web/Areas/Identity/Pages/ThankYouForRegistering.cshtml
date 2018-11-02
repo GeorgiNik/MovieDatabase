@@ -6,7 +6,8 @@
 
 @if (Model.Output.Resent)
 {
-    <div class="alert alert-alt alert-success mb alert-large fade in show-on-load" role="alert">
+    <div class="alert alert-alt alert-success mb alert-large fade in alert-dismissable alert-validation" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
         <div class="alert-body">
             Email successfully resent
         </div>
@@ -15,7 +16,8 @@
 
 @if (Model.Output.SubsequentResend)
 {
-    <div class="alert alert-alt alert-danger mb alert-large fade in show-on-load" role="alert">
+    <div class="alert alert-alt alert-danger mb alert-large fade in alert-dismissable alert-validation" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
         <div class="alert-body">
             Please allow some time for the email to arrive. You can try resending the confirmation token in a few minutes.
         </div>

@@ -194,3 +194,7 @@ body.main-body .navbar {
         display: block;
         margin-bottom: 0;
     }
+
+.alert.alert-dismissable.alert-validation .close {
+    top: 10px;
+}

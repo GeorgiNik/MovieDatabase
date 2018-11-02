@@ -29,7 +29,7 @@
         {
             var user = await this.UserManager.FindByEmailAsync(userName);
 
-            if (!user.IsActive || user.IsDeleted)
+            if (user == null || !user.IsActive || user.IsDeleted)
             {
                 return SignInResult.NotAllowed;
             }
