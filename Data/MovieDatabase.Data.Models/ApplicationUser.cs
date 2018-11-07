@@ -1,11 +1,10 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
+
 namespace MovieDatabase.Data.Models
 {
     using System;
     using System.Collections.Generic;
-
     using Microsoft.AspNetCore.Identity;
-
     using MovieDatabase.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
@@ -13,9 +12,6 @@ namespace MovieDatabase.Data.Models
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Roles = new HashSet<IdentityUserRole<string>>();
-            this.Claims = new HashSet<IdentityUserClaim<string>>();
-            this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
         public string Firstname { get; set; }
@@ -35,11 +31,23 @@ namespace MovieDatabase.Data.Models
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+        
+        public double UserRating { get; set; }
 
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserRole<string>>();
 
-        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
+        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; } = new HashSet<IdentityUserClaim<string>>();
 
-        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; } = new List<IdentityUserLogin<string>>();
+
+        public virtual ICollection<Movie> Wishlist { get; set; } = new HashSet<Movie>();
+        
+        public virtual ICollection<Movie> WatchedMovies { get; set; } = new HashSet<Movie>();
+        
+        public virtual ICollection<Movie> OwnedMovies { get; set; } = new HashSet<Movie>();
+
+        public virtual ICollection<Post> Posts{ get; set; } = new HashSet<Post>();
+        
+        public virtual ICollection<Event> Events{ get; set; } = new HashSet<Event>();
     }
 }
