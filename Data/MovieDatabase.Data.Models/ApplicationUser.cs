@@ -48,6 +48,6 @@ namespace MovieDatabase.Data.Models
 
         public virtual ICollection<Post> Posts{ get; set; } = new HashSet<Post>();
         
-        public virtual ICollection<Event> Events{ get; set; } = new HashSet<Event>();
+        public ICollection<EventParticipant> Events{ get; set; } = new List<EventParticipant>();
     }
 }

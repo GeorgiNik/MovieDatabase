@@ -5,10 +5,8 @@
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-
     using MovieDatabase.Data.Common.Models;
     using MovieDatabase.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +23,18 @@
         }
 
         public DbSet<Setting> Settings { get; set; }
+
+        public DbSet<Actor> Actors { get; set; }
+
+        public DbSet<Event> Events { get; set; }
+
+        public DbSet<Festival> Festivals { get; set; }
+
+        public DbSet<Movie> Movies { get; set; }
+
+        public DbSet<Post> Posts { get; set; }
+
+        public DbSet<MovieCategory> MovieCategories { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -96,6 +106,32 @@
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.Entity<MovieActor>()
+                .HasKey(bc => new { bc.MovieId, bc.ActorId });
+            
+            builder.Entity<MovieActor>()
+                .HasOne(bc => bc.Actor)
+                .WithMany(b => b.StaredIn)
+                .HasForeignKey(bc => bc.MovieId);
+            
+            builder.Entity<MovieActor>()
+                .HasOne(bc => bc.Movie)
+                .WithMany(c => c.Actors)
+                .HasForeignKey(bc => bc.ActorId);
+            
+            builder.Entity<EventParticipant>()
+                .HasKey(bc => new { bc.UserId, bc.EventId });
+            
+            builder.Entity<EventParticipant>()
+                .HasOne(bc => bc.Participant)
+                .WithMany(b => b.Events)
+                .HasForeignKey(bc => bc.EventId);
+            
+            builder.Entity<EventParticipant>()
+                .HasOne(bc => bc.Event)
+                .WithMany(c => c.Participants)
+                .HasForeignKey(bc => bc.UserId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

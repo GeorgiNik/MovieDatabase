@@ -19,6 +19,6 @@ namespace MovieDatabase.Data.Models
 
         public Gender Gender { get; set; }
 
-        public virtual ICollection<Movie> StaredIn { get; set; } = new HashSet<Movie>();
+        public virtual ICollection<MovieActor> StaredIn { get; set; }
     }
 }

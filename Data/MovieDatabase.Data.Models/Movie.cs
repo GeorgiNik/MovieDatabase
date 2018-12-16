@@ -39,14 +39,14 @@ namespace MovieDatabase.Data.Models
 
         public string CountryOfProduction { get; set; }
 
-        public ICollection<string> Cast { get; set; } = new HashSet<string>();
+        public ICollection<CastMember> Cast { get; set; } = new HashSet<CastMember>();
 
-        public ICollection<string> Awards { get; set; } = new HashSet<string>();
+        public ICollection<Award> Awards { get; set; } = new HashSet<Award>();
 
-        public ICollection<string> Comments { get; set; } = new HashSet<string>();
+        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         
-        public ICollection<string> Keywords { get; set; } = new HashSet<string>();
+        public ICollection<Keyword> Keywords { get; set; } = new HashSet<Keyword>();
 
-        public virtual ICollection<Actor> Actors { get; set; } = new HashSet<Actor>();
+        public ICollection<MovieActor> Actors { get; set; } 
     }
 }
