@@ -3,7 +3,7 @@ namespace MovieDatabase.Data.Models
     using System;
     using MovieDatabase.Data.Common.Models;
 
-    public class CastMember: BaseModel<string>
+    public class CastMember: BaseDeletableModel<string>
     {
         public CastMember()
         {

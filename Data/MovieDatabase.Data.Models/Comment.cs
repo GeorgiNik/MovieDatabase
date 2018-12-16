@@ -3,7 +3,7 @@ namespace MovieDatabase.Data.Models
     using System;
     using MovieDatabase.Data.Common.Models;
 
-    public class Comment: BaseModel<string>
+    public class Comment: BaseDeletableModel<string>
     {
         public Comment()
         {

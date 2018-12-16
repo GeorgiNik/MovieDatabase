@@ -3,7 +3,7 @@ namespace MovieDatabase.Data.Models
     using System;
     using MovieDatabase.Data.Common.Models;
 
-    public class Keyword: BaseModel<string>
+    public class Keyword: BaseDeletableModel<string>
     {
         public Keyword()
         {

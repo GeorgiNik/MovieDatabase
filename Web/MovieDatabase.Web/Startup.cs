@@ -20,7 +20,9 @@
     using MovieDatabase.Data.Models;
     using MovieDatabase.Data.Repositories;
     using MovieDatabase.Data.Seeding;
+    using MovieDatabase.Services.Contracts;
     using MovieDatabase.Services.Identity;
+    using MovieDatabase.Services.Implementation;
     using MovieDatabase.Services.Messaging.EmailSender;
     using MovieDatabase.Web.ViewModels.Account;
 
@@ -102,6 +104,7 @@
 
             // Application services
             services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
