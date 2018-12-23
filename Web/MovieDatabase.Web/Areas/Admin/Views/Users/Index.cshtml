@@ -1,0 +1,93 @@
+@model MovieDatabase.Web.Areas.Admin.Models.Users.UserListVM
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "_Layout";
+}
+
+<h2>Users</h2>
+
+<div class="panel panel-white">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-hover no-mb">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@user.Username</td>
+                            <td>@user.Firstname</td>
+                            <td>@user.Lastname</td>
+                            <td>
+                                <a href="@Url.Action("Index", "Users")">To profile</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if (Model.ShowPagination)
+{
+    <nav aria-label="Page navigation">
+        <ul class="pagination no-mt mb">
+            <li>
+                <a href="@Url.Action("Index", "Users", new {
+                                               page = Model.PreviousPage,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })" class="pagination-prev" aria-label="Previous"></a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="active">
+                        <a href="@Url.Action("Index", "Users", new {
+                                               page = i,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.Action("Index", "Users", new {
+                                               page = i,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+
+            <li>
+                <a href="@Url.Action("Index", "Users", new {
+                                               page = Model.NextPage,
+                                               pageSize = Context.Request.Query["pageSize"],
+                                               usernameEmail = Context.Request.Query["usernameEmail"],
+                                           })" class="pagination-next" aria-label="Next"></a>
+            </li>
+        </ul>
+    </nav>
+}
+
