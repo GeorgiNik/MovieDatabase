@@ -11,6 +11,10 @@
         if (!$('.alert.show-on-load.fade').hasClass('in')) {
             $('.alert.show-on-load.fade').addClass('in');
         }
+
+        $(".alert.dismiss").fadeTo(2000, 500).slideUp(500, function () {
+            $(".alert.dismiss").slideUp(500);
+        });
     });
     
 }());

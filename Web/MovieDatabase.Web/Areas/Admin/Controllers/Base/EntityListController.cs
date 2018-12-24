@@ -10,7 +10,7 @@
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("Admin")]
-    public class EntityListController : Controller
+    public class EntityListController : BaseController
     {
         protected IQueryable<T> PaginateList<T>(PaginationVM pagination, IQueryable<T> query)
         {

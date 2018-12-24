@@ -1,0 +1,99 @@
+@model MovieDatabase.Web.Areas.Admin.Models.Users.UserVM
+
+@{
+    ViewBag.Title = "View user account";
+    Layout = "_Layout";
+}
+
+<partial name="_StatusMessage" model="ViewBag.Alert" />
+
+<div class="page-intro">
+    <h2>@Model.Firstname @Model.Lastname (@Model.Email)</h2>
+</div>
+
+<div class="panel panel-white demo-panel mb">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-4">
+                <div class="text-muted text-center">Name</div>
+                <div class="h4 text-center text-dark no-mb">@Model.Firstname @Model.Lastname</div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="text-muted text-center">Username</div>
+                <div class="h4 text-center text-dark no-mb">@Model.Username</div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="text-muted text-center">Email</div>
+                <div class="h4 text-center text-dark no-mb">@Model.Email</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="panel panel-white demo-panel mb">
+    <div class="panel-heading">
+        <div class="panel-title">System information</div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-3">
+                <div class="text-muted">Registered on</div>
+                <div class="h4 text-dark no-mb">@Model.CreatedOn.ToString("dd/MM/yyyy HH:mm")</div>
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="text-muted">Email confirmed</div>
+                @if (Model.EmailConfirmed)
+                {
+                <div class="h4 text-dark no-mb">
+                    <span class='label label-success'>Confirmed</span>
+                </div>
+                }
+                else
+                {
+                <div class="h4 text-dark no-mb">
+                    <span class='label label-danger'>Not confirmed</span>
+                </div>
+                }
+            </div>
+            <div class="col-xs-12 col-md-3">
+                <div class="text-muted">Active</div>
+                @if (Model.IsActive)
+                {
+                <div class="h4 text-dark no-mb">
+                    <span class='label label-success'>Active</span>
+                </div>
+                }
+                else
+                {
+                <div class="h4 text-dark no-mb">
+                    <span class='label label-danger'>Disabled</span>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-white demo-panel mb">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                @if (Model.IsActive)
+                {
+                <form method="post" asp-controller="Users" asp-action="DeactivateUser">
+                    <input type="hidden" value="@Model.Id" />
+                    <button class="btn btn-danger btn-waves waves-light" type="submit">Deactivate user</button>
+                </form>
+                }
+                else
+                {
+                <form method="post" asp-controller="Users" asp-action="ActivateUser">
+                    <input type="hidden" value="@Model.Id" />
+                    <button class="btn btn-primary btn-waves waves-light" type="submit">Activate user</button>
+                </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

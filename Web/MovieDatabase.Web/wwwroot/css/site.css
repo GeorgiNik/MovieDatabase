@@ -236,3 +236,9 @@ body.main-body {
 .dashb-user .image.logo {
     margin-bottom: 2rem;
 }
+
+
+.input-inline {
+    display: inline-block;
+    min-width: 60px;
+}
