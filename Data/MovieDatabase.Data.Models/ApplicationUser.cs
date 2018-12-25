@@ -31,8 +31,6 @@ namespace MovieDatabase.Data.Models
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
-        
-        public double UserRating { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserRole<string>>();
 
@@ -40,14 +38,16 @@ namespace MovieDatabase.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; } = new List<IdentityUserLogin<string>>();
 
-        public virtual ICollection<Movie> Wishlist { get; set; } = new HashSet<Movie>();
+        public virtual ICollection<UserWishlist> UserWishlists { get; set; } = new HashSet<UserWishlist>();
         
-        public virtual ICollection<Movie> WatchedMovies { get; set; } = new HashSet<Movie>();
+        public virtual ICollection<UserWatchedMovie> UserWatchedMovies { get; set; } = new HashSet<UserWatchedMovie>();
         
-        public virtual ICollection<Movie> OwnedMovies { get; set; } = new HashSet<Movie>();
+        public virtual ICollection<UserOwnedMovie> UserOwnedMovies { get; set; } = new HashSet<UserOwnedMovie>();
 
-        public virtual ICollection<Post> Posts{ get; set; } = new HashSet<Post>();
+        public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
         
-        public ICollection<EventParticipant> Events{ get; set; } = new List<EventParticipant>();
+        public ICollection<EventParticipant> Events { get; set; } = new List<EventParticipant>();
+
+        public virtual ICollection<UserRating> UserRatings { get; set; } = new HashSet<UserRating>();
     }
 }

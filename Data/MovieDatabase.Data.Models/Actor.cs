@@ -12,12 +12,12 @@ namespace MovieDatabase.Data.Models
             this.Id = Guid.NewGuid().ToString();
         }
 
-        [Range(0, 150, ErrorMessage = "Invalid Age")]
-        public int Age { get; set; }
+        //[Range(0, 150, ErrorMessage = "Invalid Age")]
+        //public int Age { get; set; }
 
-        public string Nationality { get; set; }
+        //public string Nationality { get; set; }
 
-        public Gender Gender { get; set; }
+        //public Gender Gender { get; set; }
 
         public virtual ICollection<MovieActor> StaredIn { get; set; }
     }

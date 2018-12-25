@@ -15,6 +15,24 @@
         $(".alert.dismiss").fadeTo(2000, 500).slideUp(500, function () {
             $(".alert.dismiss").slideUp(500);
         });
+
+        $('.confirmation-modal').on('show.bs.modal', function (e) {
+            var $invoker = $(e.relatedTarget);
+            $(this).find("#confirm").attr('data-form', $invoker.attr('data-form'));
+        });
+
+        $('.confirmation-modal #confirm').on('click', function (e) {
+            var $form = $($(this).attr('data-form'));
+
+            if ($.isFunction($form.valid)) {
+                if ($form.valid()) {
+                    $form.submit();
+                }
+            }
+            else {
+                $form.submit();
+            }
+        });
     });
-    
+
 }());

@@ -1,6 +1,6 @@
 namespace MovieDatabase.Data.Models
 {
-    public class MovieActor    
+    public class MovieActor
     {
         public string MovieId { get; set; }
 
@@ -9,5 +9,7 @@ namespace MovieDatabase.Data.Models
         public Actor Actor { get; set; }
         
         public string ActorId { get; set; }
+
+        public string CharacterName { get; set; }
     }
 }

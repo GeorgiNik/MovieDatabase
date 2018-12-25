@@ -26,6 +26,12 @@
 
         public DbSet<Actor> Actors { get; set; }
 
+        public DbSet<Director> Directors { get; set; }
+
+        public DbSet<Screenwriter> Screenwriters { get; set; }
+
+        public DbSet<Composer> Composers { get; set; }
+
         public DbSet<Event> Events { get; set; }
 
         public DbSet<Festival> Festivals { get; set; }
@@ -61,6 +67,8 @@
             base.OnModelCreating(builder);
 
             ConfigureUserIdentityRelations(builder);
+            ConfigureConstraints(builder);
+            ConfigureRatingRelations(builder);
 
             EntityIndexesConfiguration.Configure(builder);
 
@@ -106,32 +114,143 @@
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
+            builder.Entity<UserWishlist>()
+                .HasKey(uw => new { uw.UserId, uw.MovieId });
+
+            builder.Entity<UserWishlist>()
+                .HasOne(uw => uw.Movie)
+                .WithMany(p => p.UserWishlists)
+                .HasForeignKey(uw => uw.UserId);
+
+            builder.Entity<UserWishlist>()
+                .HasOne(uw => uw.User)
+                .WithMany(c => c.UserWishlists)
+                .HasForeignKey(pc => pc.MovieId);
+
+            builder.Entity<UserWatchedMovie>()
+                .HasKey(uw => new { uw.UserId, uw.MovieId });
+
+            builder.Entity<UserWatchedMovie>()
+                .HasOne(uw => uw.Movie)
+                .WithMany(p => p.UserWatchedMovies)
+                .HasForeignKey(uw => uw.UserId);
+
+            builder.Entity<UserWatchedMovie>()
+                .HasOne(uw => uw.User)
+                .WithMany(c => c.UserWatchedMovies)
+                .HasForeignKey(pc => pc.MovieId);
+
+            builder.Entity<UserOwnedMovie>()
+               .HasKey(uw => new { uw.UserId, uw.MovieId });
+
+            builder.Entity<UserOwnedMovie>()
+                .HasOne(uw => uw.Movie)
+                .WithMany(p => p.UserOwnedMovies)
+                .HasForeignKey(uw => uw.UserId);
+
+            builder.Entity<UserOwnedMovie>()
+                .HasOne(uw => uw.User)
+                .WithMany(c => c.UserOwnedMovies)
+                .HasForeignKey(pc => pc.MovieId);
+
             builder.Entity<MovieActor>()
                 .HasKey(bc => new { bc.MovieId, bc.ActorId });
-            
+
+            builder.Entity<MovieDirector>()
+                .HasKey(bc => new { bc.MovieId, bc.DirectorId });
+
+            builder.Entity<MovieScreenwriter>()
+                .HasKey(bc => new { bc.MovieId, bc.ScreenwriterId });
+
+            builder.Entity<MovieComposer>()
+                .HasKey(bc => new { bc.MovieId, bc.ComposerId });
+
             builder.Entity<MovieActor>()
                 .HasOne(bc => bc.Actor)
                 .WithMany(b => b.StaredIn)
                 .HasForeignKey(bc => bc.MovieId);
-            
+
+            builder.Entity<MovieDirector>()
+                .HasOne(bc => bc.Director)
+                .WithMany(b => b.Directed)
+                .HasForeignKey(bc => bc.MovieId);
+
+            builder.Entity<MovieScreenwriter>()
+                .HasOne(bc => bc.Screenwriter)
+                .WithMany(b => b.Written)
+                .HasForeignKey(bc => bc.MovieId);
+
+            builder.Entity<MovieComposer>()
+                .HasOne(bc => bc.Composer)
+                .WithMany(b => b.Composed)
+                .HasForeignKey(bc => bc.MovieId);
+
             builder.Entity<MovieActor>()
                 .HasOne(bc => bc.Movie)
                 .WithMany(c => c.Actors)
                 .HasForeignKey(bc => bc.ActorId);
-            
+
+            builder.Entity<MovieDirector>()
+                .HasOne(bc => bc.Movie)
+                .WithOne(c => c.Director);
+
+            builder.Entity<MovieScreenwriter>()
+                .HasOne(bc => bc.Movie)
+                .WithOne(c => c.Screenwriter);
+
+            builder.Entity<MovieComposer>()
+                .HasOne(bc => bc.Movie)
+                .WithOne(c => c.Composer);
+
             builder.Entity<EventParticipant>()
                 .HasKey(bc => new { bc.UserId, bc.EventId });
-            
+
             builder.Entity<EventParticipant>()
                 .HasOne(bc => bc.Participant)
                 .WithMany(b => b.Events)
                 .HasForeignKey(bc => bc.EventId);
-            
+
             builder.Entity<EventParticipant>()
                 .HasOne(bc => bc.Event)
                 .WithMany(c => c.Participants)
                 .HasForeignKey(bc => bc.UserId);
+        }
+
+        private static void ConfigureConstraints(ModelBuilder builder)
+        {
+            builder.Entity<Movie>()
+                .HasIndex(u => u.Slug)
+                .IsUnique();
+        }
+
+        private static void ConfigureRatingRelations(ModelBuilder builder)
+        {
+            builder.Entity<UserRating>()
+                .HasKey(uw => new { uw.UserId, uw.RatingId });
+
+            builder.Entity<UserRating>()
+                .HasOne(uw => uw.User)
+                .WithMany(p => p.UserRatings)
+                .HasForeignKey(uw => uw.UserId);
+
+            builder.Entity<UserRating>()
+                .HasOne(uw => uw.Rating)
+                .WithMany(c => c.UserRatings)
+                .HasForeignKey(pc => pc.RatingId);
+
+            builder.Entity<MovieRating>()
+                .HasKey(uw => new { uw.RatingId, uw.MovieId });
+
+            builder.Entity<MovieRating>()
+                .HasOne(uw => uw.Movie)
+                .WithMany(p => p.Ratings)
+                .HasForeignKey(uw => uw.MovieId);
+
+            builder.Entity<MovieRating>()
+                .HasOne(uw => uw.Rating)
+                .WithMany(c => c.MovieRatings)
+                .HasForeignKey(pc => pc.RatingId);
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

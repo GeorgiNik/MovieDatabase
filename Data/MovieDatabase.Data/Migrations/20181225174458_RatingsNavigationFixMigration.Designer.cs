@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieDatabase.Data;
 
 namespace MovieDatabase.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181225174458_RatingsNavigationFixMigration")]
+    partial class RatingsNavigationFixMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -556,9 +558,13 @@ namespace MovieDatabase.Data.Migrations
 
                     b.Property<string>("MovieId");
 
+                    b.Property<string>("MovieId1");
+
                     b.HasKey("RatingId", "MovieId");
 
                     b.HasIndex("MovieId");
+
+                    b.HasIndex("MovieId1");
 
                     b.ToTable("MovieRating");
                 });
@@ -694,9 +700,13 @@ namespace MovieDatabase.Data.Migrations
 
                     b.Property<string>("RatingId");
 
+                    b.Property<string>("UserId1");
+
                     b.HasKey("UserId", "RatingId");
 
                     b.HasIndex("RatingId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("UserRating");
                 });
@@ -859,13 +869,17 @@ namespace MovieDatabase.Data.Migrations
 
             modelBuilder.Entity("MovieDatabase.Data.Models.MovieRating", b =>
                 {
-                    b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
+                    b.HasOne("MovieDatabase.Data.Models.Movie")
                         .WithMany("Ratings")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId1");
+
                     b.HasOne("MovieDatabase.Data.Models.Rating", "Rating")
-                        .WithMany("MovieRatings")
+                        .WithMany()
                         .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
@@ -912,14 +926,18 @@ namespace MovieDatabase.Data.Migrations
             modelBuilder.Entity("MovieDatabase.Data.Models.UserRating", b =>
                 {
                     b.HasOne("MovieDatabase.Data.Models.Rating", "Rating")
-                        .WithMany("UserRatings")
+                        .WithMany()
                         .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MovieDatabase.Data.Models.ApplicationUser", "User")
+                    b.HasOne("MovieDatabase.Data.Models.ApplicationUser")
                         .WithMany("UserRatings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MovieDatabase.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.UserWatchedMovie", b =>
