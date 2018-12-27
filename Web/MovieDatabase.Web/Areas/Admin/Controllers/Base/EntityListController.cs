@@ -26,5 +26,16 @@
 
             return totalPages;
         }
+
+        protected PaginationVM GetCurrentPagination()
+        {
+            PaginationVM pagination = new PaginationVM
+            {
+                Page = !string.IsNullOrWhiteSpace(this.Request.Query["page"]) ? int.Parse(this.Request.Query["page"]) : 1,
+                PageSize = !string.IsNullOrWhiteSpace(this.Request.Query["pageSize"]) ? int.Parse(this.Request.Query["pageSize"]) : 20,
+            };
+
+            return pagination;
+        }
     }
 }

@@ -16,21 +16,21 @@
     using MovieDatabase.Services.Contracts;
     using MovieDatabase.Web.Areas.Admin.Controllers.Base;
     using MovieDatabase.Web.Areas.Admin.Models;
-    using MovieDatabase.Web.Areas.Admin.Models.Actors;
+    using MovieDatabase.Web.Areas.Admin.Models.Screenwriters;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("Admin")]
-    public class ActorsController : EntityListController
+    public class ScreenwritersController : EntityListController
     {
-        private ICrudService<Actor> actorService;
+        private ICrudService<Screenwriter> screenwriterService;
 
-        public ActorsController(ICrudService<Actor> actorService)
+        public ScreenwritersController(ICrudService<Screenwriter> screenwriterService)
         {
-            this.actorService = actorService;
+            this.screenwriterService = screenwriterService;
         }
 
         [HttpGet]
-        [Route("admin/actors")]
+        [Route("admin/screenwriters")]
         public IActionResult Index(PaginationVM pagination, string name)
         {
             if (this.HasAlert)
@@ -38,22 +38,22 @@
                 this.SetAlertModel();
             }
 
-            var actorsQuery = this.actorService.GetAllWithDeleted();
+            var screenwritersQuery = this.screenwriterService.GetAllWithDeleted();
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                actorsQuery = actorsQuery.Where(a => a.Name.ToLower().Contains(name.ToLower()));
+                screenwritersQuery = screenwritersQuery.Where(a => a.Name.ToLower().Contains(name.ToLower()));
             }
 
-            actorsQuery = actorsQuery.OrderBy(u => u.IsDeleted).ThenByDescending(u => u.Name);
+            screenwritersQuery = screenwritersQuery.OrderBy(u => u.IsDeleted).ThenByDescending(u => u.Name);
 
-            var paginatedActors = this.PaginateList<ActorVM>(pagination, actorsQuery.ProjectTo<ActorVM>()).ToList();
+            var paginatedScreenwriters = this.PaginateList<ScreenwriterVM>(pagination, screenwritersQuery.ProjectTo<ScreenwriterVM>()).ToList();
 
-            int totalPages = this.GetTotalPages(pagination.PageSize, actorsQuery.Count());
+            int totalPages = this.GetTotalPages(pagination.PageSize, screenwritersQuery.Count());
 
-            ActorListVM actorListModel = new ActorListVM
+            ScreenwriterListVM screenwriterListModel = new ScreenwriterListVM
             {
-                Actors = paginatedActors,
+                Screenwriters = paginatedScreenwriters,
                 NextPage = pagination.Page < totalPages ? pagination.Page + 1 : pagination.Page,
                 PreviousPage = pagination.Page > 1 ? pagination.Page - 1 : pagination.Page,
                 CurrentPage = pagination.Page,
@@ -61,13 +61,13 @@
                 ShowPagination = totalPages > 1,
             };
 
-            return this.View(new ActorCombinedVM { ActorList = actorListModel });
+            return this.View(new ScreenwriterCombinedVM { ScreenwriterList = screenwriterListModel });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("admin/actors/create")]
-        public async Task<IActionResult> Create(ActorCombinedVM vm)
+        [Route("admin/screenwriters/create")]
+        public async Task<IActionResult> Create(ScreenwriterCombinedVM vm)
         {
             PaginationVM pagination = this.GetCurrentPagination();
 
@@ -77,47 +77,32 @@
                 return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
             }
 
-            var actor = Mapper.Map<Actor>(vm.Actor);
+            var screenwriter = Mapper.Map<Screenwriter>(vm.Screenwriter);
 
-            await this.actorService.Create(actor);
+            await this.screenwriterService.Create(screenwriter);
 
-            this.AddAlert(true, "Successfully added actor");
+            this.AddAlert(true, "Successfully added screenwriter");
 
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("admin/actors/delete")]
-        public async Task<IActionResult> Delete(string actorId)
+        [Route("admin/screenwriters/delete")]
+        public async Task<IActionResult> Delete(string screenwriterId)
         {
-            if (string.IsNullOrWhiteSpace(actorId))
+            if (string.IsNullOrWhiteSpace(screenwriterId))
             {
-                return this.BadRequest($"invalid actor id");
+                return this.BadRequest($"invalid screenwriter id");
             }
 
             PaginationVM pagination = this.GetCurrentPagination();
 
-            await this.actorService.Delete(actorId);
+            await this.screenwriterService.Delete(screenwriterId);
 
-            this.AddAlert(true, "Successfully deleted actor");
+            this.AddAlert(true, "Successfully deleted screenwriter");
 
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
         }
-
-        //public async Task<IActionResult> Edit(string id)
-        //{
-        //    var actor = await this.actorService.Get(id);
-        //    var actorVm = Mapper.Map<ActorVM>(actor);
-
-        //    return this.View(actorVm);
-        //}
-
-        //public async Task<IActionResult> Edit(ActorVM vm)
-        //{
-        //    await this.actorService.Update(Mapper.Map<Actor>(vm));
-
-        //    return this.RedirectToAction("Index");
-        //}
     }
 }

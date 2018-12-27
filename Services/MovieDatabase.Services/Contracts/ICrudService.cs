@@ -8,6 +8,8 @@ namespace MovieDatabase.Services.Contracts
     {
         IQueryable<T> GetAll();
 
+        IQueryable<T> GetAllWithDeleted();
+
         Task<T> Get(string id);
 
         Task<T> Create(T entity);

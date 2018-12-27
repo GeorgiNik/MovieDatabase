@@ -25,6 +25,13 @@ namespace MovieDatabase.Services.Implementation
             return result;
         }
 
+        public IQueryable<T> GetAllWithDeleted()
+        {
+            var result = this.data.AllWithDeleted();
+
+            return result;
+        }
+
         public async Task<T> Get(string id)
         {
             var entity = await this.data.GetByIdAsync(id);

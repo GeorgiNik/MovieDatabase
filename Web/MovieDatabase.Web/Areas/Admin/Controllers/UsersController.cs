@@ -40,7 +40,7 @@
                 usersQuery = usersQuery.Where(u => u.UserName.ToLower().Contains(usernameEmail.ToLower()) || u.Email.ToLower().Contains(usernameEmail.ToLower()));
             }
 
-            usersQuery = usersQuery.OrderByDescending(u => u.CreatedOn);
+            usersQuery = usersQuery.OrderBy(u => u.IsDeleted).ThenByDescending(u => u.CreatedOn);
 
             var paginatedUsers = this.PaginateList<UserVM>(pagination, usersQuery.ProjectTo<UserVM>()).ToList();
 
