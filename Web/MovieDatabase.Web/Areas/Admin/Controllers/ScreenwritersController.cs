@@ -104,5 +104,25 @@
 
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("admin/screenwriters/restore")]
+        public async Task<IActionResult> Restore(string screenwriterId)
+        {
+            if (string.IsNullOrWhiteSpace(screenwriterId))
+            {
+                return this.BadRequest($"invalid screenwriter id");
+            }
+
+            PaginationVM pagination = this.GetCurrentPagination();
+
+            await this.screenwriterService.Restore(screenwriterId);
+
+            this.AddAlert(true, "Successfully restored screenwriter");
+
+            return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
+        }
     }
 }

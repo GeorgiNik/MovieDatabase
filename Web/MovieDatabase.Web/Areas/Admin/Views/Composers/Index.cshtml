@@ -10,10 +10,18 @@
         ModalMessage = "Are you sure you want to delete the selected entry?",
         SubmitButtonText = "Confirm",
     };
+    var ConfirmationRestoreModalModel = new MovieDatabase.Web.Areas.Admin.Models.ModalVM
+    {
+        ModalId = "restore-entity-modal",
+        ModalTitle = "Confirmation needed",
+        ModalMessage = "Are you sure you want to restore the selected entry?",
+        SubmitButtonText = "Confirm",
+    };
 }
 
 <partial name="_StatusMessage" model="ViewBag.Alert" />
 <partial name="_ConfirmationModal" model="ConfirmationModalModel" />
+<partial name="_ConfirmationModal" model="ConfirmationRestoreModalModel" />
 
 <div class="page-intro">
     <h2>Composers</h2>
@@ -100,27 +108,36 @@
 
                     @foreach (var composer in Model.ComposerList.Composers)
                     {
-                        <tr>
-                            <td>@composer.Name</td>
-                            <td>@composer.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>
-                                @if (!composer.IsDeleted)
-                                {
-                                    <span class='label label-success'>Not deleted</span>
-                                }
-                                else
-                                {
-                                    <span class='label label-danger'>Deleted</span>
-                                }
-                            </td>
-                            <td>
-                                <form method="post" asp-controller="Composers" asp-action="Delete" id="deleteComposerFom">
-                                    <input type="hidden" value="@composer.Id" name="composerId"/>
-                                    <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteComposerFom"><i class="fa fa-trash-o"></i></a>
+                    <tr>
+                        <td>@composer.Name</td>
+                        <td>@composer.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            @if (!composer.IsDeleted)
+                            {
+                                <span class='label label-success'>Not deleted</span>
+                            }
+                            else
+                            {
+                                <span class='label label-danger'>Deleted</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!composer.IsDeleted)
+                            {
+                                <form method="post" asp-controller="Composers" asp-action="Delete" id="deleteComposerForm-@composer.Id">
+                                    <input type="hidden" value="@composer.Id" name="composerId" />
+                                    <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteComposerForm-@composer.Id"><i class="fa fa-trash-o"></i></a>
                                 </form>
-                                
-                            </td>
-                        </tr>
+                            }
+                            else
+                            {
+                                <form method="post" asp-controller="Composers" asp-action="Restore" id="restoreComposerForm-@composer.Id">
+                                    <input type="hidden" value="@composer.Id" name="composerId" />
+                                    <a href="#" data-toggle="modal" data-target="#@ConfirmationRestoreModalModel.ModalId" data-form="#restoreComposerForm-@composer.Id"><i class="fa fa-eye"></i></a>
+                                </form>
+                            }
+                        </td>
+                    </tr>
                     }
 
                 </tbody>

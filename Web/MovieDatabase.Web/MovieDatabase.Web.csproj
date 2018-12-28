@@ -39,6 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\Admin\Views\MovieCategories\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Admin\Views\Composers\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -1,7 +1,7 @@
-@model MovieDatabase.Web.Areas.Admin.Models.Screenwriters.ScreenwriterCombinedVM
+@model MovieDatabase.Web.Areas.Admin.Models.MovieCategories.MovieCategoryCombinedVM
 
 @{
-    ViewBag.Title = "Screenwriters";
+    ViewBag.Title = "Movie categories";
     Layout = "_Layout";
     var ConfirmationModalModel = new MovieDatabase.Web.Areas.Admin.Models.ModalVM
     {
@@ -24,14 +24,14 @@
 <partial name="_ConfirmationModal" model="ConfirmationRestoreModalModel" />
 
 <div class="page-intro">
-    <h2>Screenwriters</h2>
+    <h2>Movie categories</h2>
 </div>
 
-<form class="form-custom" method="get" asp-controller="Screenwriters" asp-action="Index" id="filter-form">
+<form class="form-custom" method="get" asp-controller="MovieCategories" asp-action="Index" id="filter-form">
     <div class="panel panel-white">
         <div class="panel-body">
 
-            <input type="hidden" name="page" value="@Model.ScreenwriterList.CurrentPage" />
+            <input type="hidden" name="page" value="@Model.MovieCategoryList.CurrentPage" />
             <div class="form-group row">
                 <div class="col-xs-12 col-md-3">
                     <div class="md-input">
@@ -67,17 +67,17 @@
 
 <div class="panel panel-white col-xs-12 col-md-3">
     <div class="panel-heading">
-        <div class="panel-title">Add screenwriter</div>
+        <div class="panel-title">Add movie category</div>
     </div>
     <div class="panel-body">
-        <form class="form-custom" method="Post" asp-controller="Screenwriters" asp-action="Create" id="add-entity-form">
+        <form class="form-custom" method="Post" asp-controller="MovieCategories" asp-action="Create" id="add-entity-form">
             <div class="form-group row mb-2x">
                 <div class="col-xs-12">
                     <div class="md-input">
                         <label for="name" class="md-input-placeholder">Name</label>
-                        <input asp-for="Screenwriter.Name" class="md-input-control">
+                        <input asp-for="MovieCategory.Name" class="md-input-control">
                     </div>
-                    <span asp-validation-for="Screenwriter.Name" class="text-danger"></span>
+                    <span asp-validation-for="MovieCategory.Name" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
@@ -98,6 +98,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Slug</th>
                         <th>CreatedOn</th>
                         <th>Is deleted</th>
                         <th></th>
@@ -106,13 +107,14 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var screenwriter in Model.ScreenwriterList.Screenwriters)
+                    @foreach (var movieCategory in Model.MovieCategoryList.MovieCategories)
                     {
                         <tr>
-                            <td>@screenwriter.Name</td>
-                            <td>@screenwriter.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@movieCategory.Name</td>
+                            <td>@movieCategory.Slug</td>
+                            <td>@movieCategory.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>
                             <td>
-                                @if (!screenwriter.IsDeleted)
+                                @if (!movieCategory.IsDeleted)
                                 {
                                     <span class='label label-success'>Not deleted</span>
                                 }
@@ -122,18 +124,18 @@
                                 }
                             </td>
                             <td>
-                                @if (!screenwriter.IsDeleted)
+                                @if (!movieCategory.IsDeleted)
                                 {
-                                    <form method="post" asp-controller="Screenwriters" asp-action="Delete" id="deleteScreenwriterForm-@screenwriter.Id">
-                                        <input type="hidden" value="@screenwriter.Id" name="screenwriterId" />
-                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteScreenwriterForm-@screenwriter.Id"><i class="fa fa-trash-o"></i></a>
+                                    <form method="post" asp-controller="MovieCategories" asp-action="Delete" id="deleteMovieCategoryForm-@movieCategory.Id">
+                                        <input type="hidden" value="@movieCategory.Id" name="movieCategoryId" />
+                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteMovieCategoryForm-@movieCategory.Id"><i class="fa fa-trash-o"></i></a>
                                     </form>
                                 }
                                 else
                                 {
-                                    <form method="post" asp-controller="Screenwriters" asp-action="Restore" id="restoreScreenwriterForm-@screenwriter.Id">
-                                        <input type="hidden" value="@screenwriter.Id" name="screenwriterId" />
-                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationRestoreModalModel.ModalId" data-form="#restoreScreenwriterForm-@screenwriter.Id"><i class="fa fa-eye"></i></a>
+                                    <form method="post" asp-controller="MovieCategories" asp-action="Restore" id="restoreMovieCategoryForm-@movieCategory.Id">
+                                        <input type="hidden" value="@movieCategory.Id" name="movieCategoryId" />
+                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationRestoreModalModel.ModalId" data-form="#restoreMovieCategoryForm-@movieCategory.Id"><i class="fa fa-eye"></i></a>
                                     </form>
                                 }
                             </td>
@@ -146,23 +148,23 @@
     </div>
 </div>
 
-@if (Model.ScreenwriterList.ShowPagination)
+@if (Model.MovieCategoryList.ShowPagination)
 {
     <nav aria-label="Page navigation">
         <ul class="pagination no-mt mb">
             <li>
-                <a href="@Url.Action("Index", "Screenwriters", new {
-                                               page = Model.ScreenwriterList.PreviousPage,
+                <a href="@Url.Action("Index", "MovieCategories", new {
+                                               page = Model.MovieCategoryList.PreviousPage,
                                                pageSize = Context.Request.Query["pageSize"],
                                                name = Context.Request.Query["name"],
                                            })" class="pagination-prev" aria-label="Previous"></a>
             </li>
-            @for (int i = 1; i <= Model.ScreenwriterList.TotalPages; i++)
+            @for (int i = 1; i <= Model.MovieCategoryList.TotalPages; i++)
             {
-                if (i == Model.ScreenwriterList.CurrentPage)
+                if (i == Model.MovieCategoryList.CurrentPage)
                 {
                     <li class="active">
-                        <a href="@Url.Action("Index", "Screenwriters", new {
+                        <a href="@Url.Action("Index", "MovieCategories", new {
                                                page = i,
                                                pageSize = Context.Request.Query["pageSize"],
                                                name = Context.Request.Query["name"],
@@ -174,7 +176,7 @@
                 else
                 {
                     <li>
-                        <a href="@Url.Action("Index", "Screenwriters", new {
+                        <a href="@Url.Action("Index", "MovieCategories", new {
                                                page = i,
                                                pageSize = Context.Request.Query["pageSize"],
                                                usernameEmail = Context.Request.Query["usernameEmail"],
@@ -186,8 +188,8 @@
             }
 
             <li>
-                <a href="@Url.Action("Index", "Screenwriters", new {
-                                               page = Model.ScreenwriterList.NextPage,
+                <a href="@Url.Action("Index", "MovieCategories", new {
+                                               page = Model.MovieCategoryList.NextPage,
                                                pageSize = Context.Request.Query["pageSize"],
                                                name = Context.Request.Query["name"],
                                            })" class="pagination-next" aria-label="Next"></a>

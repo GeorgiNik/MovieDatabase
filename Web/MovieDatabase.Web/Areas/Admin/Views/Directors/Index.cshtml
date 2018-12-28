@@ -10,10 +10,18 @@
         ModalMessage = "Are you sure you want to delete the selected entry?",
         SubmitButtonText = "Confirm",
     };
+    var ConfirmationRestoreModalModel = new MovieDatabase.Web.Areas.Admin.Models.ModalVM
+    {
+        ModalId = "restore-entity-modal",
+        ModalTitle = "Confirmation needed",
+        ModalMessage = "Are you sure you want to restore the selected entry?",
+        SubmitButtonText = "Confirm",
+    };
 }
 
 <partial name="_StatusMessage" model="ViewBag.Alert" />
 <partial name="_ConfirmationModal" model="ConfirmationModalModel" />
+<partial name="_ConfirmationModal" model="ConfirmationRestoreModalModel" />
 
 <div class="page-intro">
     <h2>Directors</h2>
@@ -114,11 +122,20 @@
                                 }
                             </td>
                             <td>
-                                <form method="post" asp-controller="Directors" asp-action="Delete" id="deleteDirectorFom">
-                                    <input type="hidden" value="@director.Id" name="directorId"/>
-                                    <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteDirectorFom"><i class="fa fa-trash-o"></i></a>
-                                </form>
-                                
+                                @if (!director.IsDeleted)
+                                {
+                                    <form method="post" asp-controller="Directors" asp-action="Delete" id="deleteDirectorForm-@director.Id">
+                                        <input type="hidden" value="@director.Id" name="directorId" />
+                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationModalModel.ModalId" data-form="#deleteDirectorForm-@director.Id"><i class="fa fa-trash-o"></i></a>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-controller="Directors" asp-action="Restore" id="restoreDirectorForm-@director.Id">
+                                        <input type="hidden" value="@director.Id" name="directorId" />
+                                        <a href="#" data-toggle="modal" data-target="#@ConfirmationRestoreModalModel.ModalId" data-form="#restoreDirectorForm-@director.Id"><i class="fa fa-eye"></i></a>
+                                    </form>
+                                }
                             </td>
                         </tr>
                     }

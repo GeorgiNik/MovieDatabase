@@ -4,5 +4,6 @@ namespace MovieDatabase.Data.Models
 
     public class MovieCategory : BaseDeletableModel<string>
     {
+        public string Slug { get; set; }
     }
 }

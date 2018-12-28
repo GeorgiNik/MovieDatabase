@@ -18,6 +18,8 @@ namespace MovieDatabase.Services.Contracts
 
         Task<bool> Delete (string id);
 
+        Task<bool> Restore(string id);
+
         Task<bool> Exists(string name);
     }
 }

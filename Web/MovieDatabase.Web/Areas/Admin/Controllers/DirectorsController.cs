@@ -104,5 +104,25 @@
 
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("admin/directors/restore")]
+        public async Task<IActionResult> Restore(string directorId)
+        {
+            if (string.IsNullOrWhiteSpace(directorId))
+            {
+                return this.BadRequest($"invalid director id");
+            }
+
+            PaginationVM pagination = this.GetCurrentPagination();
+
+            await this.directorService.Restore(directorId);
+
+            this.AddAlert(true, "Successfully restored director");
+
+            return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
+        }
     }
 }

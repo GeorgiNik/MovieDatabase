@@ -104,5 +104,24 @@
 
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("admin/composers/restore")]
+        public async Task<IActionResult> Restore(string composerId)
+        {
+            if (string.IsNullOrWhiteSpace(composerId))
+            {
+                return this.BadRequest($"invalid composer id");
+            }
+
+            PaginationVM pagination = this.GetCurrentPagination();
+
+            await this.composerService.Restore(composerId);
+
+            this.AddAlert(true, "Successfully restored composer");
+
+            return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
+        }
     }
 }

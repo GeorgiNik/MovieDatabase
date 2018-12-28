@@ -219,7 +219,11 @@
 
         private static void ConfigureConstraints(ModelBuilder builder)
         {
-            builder.Entity<Movie>()
+            //builder.Entity<Movie>()
+            //    .HasIndex(u => u.Slug)
+            //    .IsUnique();
+
+            builder.Entity<MovieCategory>()
                 .HasIndex(u => u.Slug)
                 .IsUnique();
         }

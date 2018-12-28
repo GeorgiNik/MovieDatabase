@@ -69,6 +69,20 @@ namespace MovieDatabase.Services.Implementation
             return false;
         }
 
+        public async Task<bool> Restore(string id)
+        {
+            var entity = await this.data.GetByIdWithDeletedAsync(id);
+
+            if (entity != null)
+            {
+                this.data.Undelete(entity);
+                await this.data.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
         public Task<bool> Exists(string name)
         {
             var exists =  this.data.All().AnyAsync(x => x.Name == name);

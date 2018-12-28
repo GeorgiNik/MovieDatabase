@@ -105,6 +105,25 @@
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("admin/actors/restore")]
+        public async Task<IActionResult> Restore(string actorId)
+        {
+            if (string.IsNullOrWhiteSpace(actorId))
+            {
+                return this.BadRequest($"invalid actor id");
+            }
+
+            PaginationVM pagination = this.GetCurrentPagination();
+
+            await this.actorService.Restore(actorId);
+
+            this.AddAlert(true, "Successfully restored actor");
+
+            return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
+        }
+
         //public async Task<IActionResult> Edit(string id)
         //{
         //    var actor = await this.actorService.Get(id);
