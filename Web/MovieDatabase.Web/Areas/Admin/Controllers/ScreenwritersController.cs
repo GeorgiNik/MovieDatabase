@@ -18,8 +18,6 @@
     using MovieDatabase.Web.Areas.Admin.Models;
     using MovieDatabase.Web.Areas.Admin.Models.Screenwriters;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
     public class ScreenwritersController : EntityListController
     {
         private ICrudService<Screenwriter> screenwriterService;

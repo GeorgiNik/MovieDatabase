@@ -18,8 +18,6 @@
     using MovieDatabase.Web.Areas.Admin.Models;
     using MovieDatabase.Web.Areas.Admin.Models.Directors;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
     public class DirectorsController : EntityListController
     {
         private ICrudService<Director> directorService;

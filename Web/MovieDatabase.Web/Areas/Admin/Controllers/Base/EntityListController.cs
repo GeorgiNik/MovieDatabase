@@ -8,8 +8,6 @@
     using MovieDatabase.Common;
     using MovieDatabase.Web.Areas.Admin.Models;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
     public class EntityListController : BaseController
     {
         protected IQueryable<T> PaginateList<T>(PaginationVM pagination, IQueryable<T> query)

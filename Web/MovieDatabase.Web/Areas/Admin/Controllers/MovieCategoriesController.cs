@@ -20,8 +20,6 @@
     using MovieDatabase.Web.Areas.Admin.Models;
     using MovieDatabase.Web.Areas.Admin.Models.MovieCategories;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
     public class MovieCategoriesController : EntityListController
     {
         private ICrudService<MovieCategory> movieCategoryService;

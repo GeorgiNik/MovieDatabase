@@ -2,6 +2,8 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
+    using MovieDatabase.Web.Areas.Admin.Controllers.Base;
+
     public class HomeController : BaseController
     {
         public IActionResult Index()

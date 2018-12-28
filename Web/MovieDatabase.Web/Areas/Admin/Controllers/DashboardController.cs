@@ -3,10 +3,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using MovieDatabase.Common;
+    using MovieDatabase.Web.Areas.Admin.Controllers.Base;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         public IActionResult Index()
         {

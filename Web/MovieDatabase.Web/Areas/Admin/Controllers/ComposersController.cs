@@ -18,8 +18,6 @@
     using MovieDatabase.Web.Areas.Admin.Models;
     using MovieDatabase.Web.Areas.Admin.Models.Composers;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
     public class ComposersController : EntityListController
     {
         private ICrudService<Composer> composerService;
