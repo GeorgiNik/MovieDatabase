@@ -7,6 +7,7 @@
 
     using MovieDatabase.Data.Models;
     using MovieDatabase.Services.Contracts;
+    using MovieDatabase.Services.Implementation;
     using MovieDatabase.Web.Controllers.Base;
     using MovieDatabase.Web.ViewModels.Posts;
 

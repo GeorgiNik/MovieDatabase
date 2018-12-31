@@ -76,6 +76,24 @@
                 </div>
             </div>
 
+            <div class="row mb-2x mt-2x">
+                <div class="section-heading col-xs-12">Awards</div>
+            </div>
+
+            <div class="form-group row award">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <input asp-for="Movie.Awards[0]" class="md-input-control award-name">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <button type="button" class="btn btn-secondary btn-waves" id="award-add-btn"><i class="fa fa-plus"></i> Add award</button>
+                    <button type="button" class="btn btn-danger btn-waves hidden" id="award-remove-btn"><i class="fa fa-minus"></i> Remove award</button>
+                </div>
+            </div>
+
             <div class="form-group row mt-2x">
                 <div class="text-center">
                     <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
@@ -92,89 +110,24 @@
     <partial name="_ValidationScriptsPartial" />
     <environment names="Development,Staging,Production">
         <script src="~/lib/typeahead/typeahead.bundle.js"></script>
+        <script src="~/js/posts/create-post.js"></script>
     </environment>
     <script>
-        $.validator.setDefaults({ ignore: ':disabled' });
-
-        function typeahead_initialize() {
-             var actors = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                remote: {
-                    url: "@Url.Action("GetActors","Actors", new { name = Html.Raw("QUERY") })",
-                    wildcard: 'QUERY'
+        (function (movieDbApp) {
+            movieDbApp.createPostConfig = {
+                getActorsUrl: '@Url.Action("GetActors", "Actors", new { name = Html.Raw("QUERY") })',
+                actorHtml: {
+                    characterNameInput: '@Html.TextBoxFor(m => m.Movie.MovieActors[-111].CharacterName, new { @class = "md-input-control character-name" })',
+                    actorIdInput: '@Html.HiddenFor(m=>m.Movie.MovieActors[-111].Id, new{ @class= "actor-id" })',
+                    characterNameValidation: '@Html.ValidationMessageFor(m=>m.Movie.MovieActors[-111].CharacterName, null, new {@class="text-danger" })'
+                },
+                awardHtml: {
+                    awardInput: '@Html.TextBoxFor(m => m.Movie.Awards[-111], new { @class = "md-input-control" })'
                 }
-            });
-
-            $('.typeahead').typeahead(null, {
-                limit: 10,
-                name: 'actors',
-                source: actors,
-                display: 'name',
-                //value: 'id',
-                templates: {
-                    empty: [
-                        '<div class="empty-message">',
-                        'Nothing found',
-                        '</div>'
-                    ].join('\n'),
-                }
-            });
-        }
-
-        typeahead_initialize();
-
-        $('.typeahead').on('typeahead:selected typeahead:autocomplete', function (e, datum) {
-            var $input = $(e.target);
-            var $movieActorContainer = $input.closest('.cast').find('.movie-actor');
-
-            //fire .focusout() so the validator can update
-            $movieActorContainer.find('.actor-id').val(datum.id).focusout();
-        });
-
-        $('#actor-add-btn').on('click', function (e) {
-            var nextId = $('.cast').length;
-
-            var html = "<div class='form-group row cast'>" +
-                            '<div class="col-xs-12 col-md-6" >' +
-                                '<div class="md-input">' +
-                                    '<input type="text" class="md-input-control typeahead">' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="col-xs-12 col-md-6">' +
-                                '<div class="md-input movie-actor">' +
-                                    '@Html.TextBoxFor(m=>m.Movie.MovieActors[-111].CharacterName, new{ @class= "md-input-control character-name" })' +
-                                    '@Html.HiddenFor(m=>m.Movie.MovieActors[-111].Id, new{ @class= "actor-id" })' +
-                                '</div>' +
-                                '@Html.ValidationMessageFor(m=>m.Movie.MovieActors[-111].CharacterName, null, new {@class="text-danger" })' +
-                            '</div>' +
-                        '</div>';
-
-            html = html.replace(/-111/g, nextId);
-            $('.cast').last().after(html);
-
-            $('.typeahead').typeahead('destroy');
-            typeahead_initialize();
-
-            $("form").removeData("validator").removeData("unobtrusiveValidation");
-            //Parse the form again
-            $.validator.unobtrusive.parse($("form"));
-
-            if ($('#actor-remove-btn').hasClass('hidden')) {
-                $('#actor-remove-btn').removeClass('hidden');
             }
-        });
 
-        $('#actor-remove-btn').on('click', function (e) {
-            var length = $('.cast').length;
+            movieDbApp.init();
+        })(window.movieDbApp);
 
-            if (length > 1) {
-                if (length == 2) {
-                    $(this).addClass('hidden');
-                }
-
-                $('.cast').last().remove();
-            }
-        });
     </script>
 }

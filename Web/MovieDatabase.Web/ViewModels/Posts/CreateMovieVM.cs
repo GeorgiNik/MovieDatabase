@@ -57,7 +57,6 @@
         [Required(ErrorMessage = "Field is required")]
         public string ComposerId { get; set; }
 
-        [Required(ErrorMessage = "Field is required")]
         public string[] Awards { get; set; }
     }
 }
