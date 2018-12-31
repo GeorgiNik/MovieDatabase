@@ -1,0 +1,180 @@
+﻿@model MovieDatabase.Web.ViewModels.Posts.CreatePostVM
+
+@{
+    this.ViewData["Title"] = "New post";
+}
+
+<div class="page-intro">
+    <h2>New post</h2>
+</div>
+
+<form class="form-custom" method="Post" asp-controller="Posts" asp-action="Create" id="add-post-form">
+    <div class="panel panel-white col-xs-12">
+        <div class="panel-body">
+
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label for="name" class="md-input-placeholder">Post title</label>
+                        <input asp-for="Name" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2x mt-2x">
+                <div class="section-heading col-xs-12">Movie</div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label for="Movie.Name" class="md-input-placeholder">Title</label>
+                        <input asp-for="Movie.Name" class="md-input-control">
+                    </div>
+                    <span asp-validation-for="Movie.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label for="Movie.Name" class="md-input-placeholder">Description</label>
+                        <textarea asp-for="Movie.Description" class="md-input-control form-control"></textarea>
+                    </div>
+                    <span asp-validation-for="Movie.Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-2x mt-2x">
+                <div class="section-heading col-xs-12 text-center">Cast</div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-6">Actor</div>
+                <div class="col-xs-12 col-md-6">Character</div>
+            </div>
+
+            <div class="form-group row cast">
+                <div class="col-xs-12 col-md-6">
+                    <div class="md-input">
+                        <input type="text" class="md-input-control typeahead">
+                    </div>
+                    <span asp-validation-for="Movie.MovieActors[0].Id" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="md-input movie-actor">
+                        <input asp-for="Movie.MovieActors[0].CharacterName" class="md-input-control character-name">
+                        <input hidden asp-for="Movie.MovieActors[0].Id" class="actor-id" />
+                    </div>
+                    <span asp-validation-for="Movie.MovieActors[0].CharacterName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row ">
+                <div class="col-xs-12">
+                    <button type="button" class="btn btn-secondary btn-waves" id="actor-add-btn"><i class="fa fa-plus"></i> Add actor</button>
+                    <button type="button" class="btn btn-danger btn-waves hidden" id="actor-remove-btn"><i class="fa fa-minus"></i> Remove actor</button>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2x">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
+                        Add post
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <environment names="Development,Staging,Production">
+        <script src="~/lib/typeahead/typeahead.bundle.js"></script>
+    </environment>
+    <script>
+        $.validator.setDefaults({ ignore: ':disabled' });
+
+        function typeahead_initialize() {
+             var actors = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: "@Url.Action("GetActors","Actors", new { name = Html.Raw("QUERY") })",
+                    wildcard: 'QUERY'
+                }
+            });
+
+            $('.typeahead').typeahead(null, {
+                limit: 10,
+                name: 'actors',
+                source: actors,
+                display: 'name',
+                //value: 'id',
+                templates: {
+                    empty: [
+                        '<div class="empty-message">',
+                        'Nothing found',
+                        '</div>'
+                    ].join('\n'),
+                }
+            });
+        }
+
+        typeahead_initialize();
+
+        $('.typeahead').on('typeahead:selected typeahead:autocomplete', function (e, datum) {
+            var $input = $(e.target);
+            var $movieActorContainer = $input.closest('.cast').find('.movie-actor');
+
+            //fire .focusout() so the validator can update
+            $movieActorContainer.find('.actor-id').val(datum.id).focusout();
+        });
+
+        $('#actor-add-btn').on('click', function (e) {
+            var nextId = $('.cast').length;
+
+            var html = "<div class='form-group row cast'>" +
+                            '<div class="col-xs-12 col-md-6" >' +
+                                '<div class="md-input">' +
+                                    '<input type="text" class="md-input-control typeahead">' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="col-xs-12 col-md-6">' +
+                                '<div class="md-input movie-actor">' +
+                                    '@Html.TextBoxFor(m=>m.Movie.MovieActors[-111].CharacterName, new{ @class= "md-input-control character-name" })' +
+                                    '@Html.HiddenFor(m=>m.Movie.MovieActors[-111].Id, new{ @class= "actor-id" })' +
+                                '</div>' +
+                                '@Html.ValidationMessageFor(m=>m.Movie.MovieActors[-111].CharacterName, null, new {@class="text-danger" })' +
+                            '</div>' +
+                        '</div>';
+
+            html = html.replace(/-111/g, nextId);
+            $('.cast').last().after(html);
+
+            $('.typeahead').typeahead('destroy');
+            typeahead_initialize();
+
+            $("form").removeData("validator").removeData("unobtrusiveValidation");
+            //Parse the form again
+            $.validator.unobtrusive.parse($("form"));
+
+            if ($('#actor-remove-btn').hasClass('hidden')) {
+                $('#actor-remove-btn').removeClass('hidden');
+            }
+        });
+
+        $('#actor-remove-btn').on('click', function (e) {
+            var length = $('.cast').length;
+
+            if (length > 1) {
+                if (length == 2) {
+                    $(this).addClass('hidden');
+                }
+
+                $('.cast').last().remove();
+            }
+        });
+    </script>
+}

@@ -242,3 +242,24 @@ body.main-body {
     display: inline-block;
     min-width: 60px;
 }
+
+span.twitter-typeahead {
+    display: block !important;
+}
+
+.tt-menu {
+    width: 100%;
+    background: rgb(255, 255, 255);
+    padding: 0.7rem;
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 12px 0 rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 12px 0 rgba(0, 0, 0, 0.09);
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 12px 0 rgba(0, 0, 0, 0.09);
+}
+
+.form-custom .section-heading {
+    font-size: 1.77rem;
+}
+
+textarea {
+    resize: vertical;
+}

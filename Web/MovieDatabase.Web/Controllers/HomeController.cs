@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using MovieDatabase.Web.Areas.Admin.Controllers.Base;
+    using MovieDatabase.Web.Controllers.Base;
 
     public class HomeController : BaseController
     {

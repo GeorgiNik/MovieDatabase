@@ -7,7 +7,8 @@
 
     using MovieDatabase.Data.Models;
     using MovieDatabase.Services.Contracts;
-    using MovieDatabase.Web.Areas.Admin.Controllers.Base;
+    using MovieDatabase.Web.Controllers.Base;
+    using MovieDatabase.Web.ViewModels.Posts;
 
     public class PostsController : BaseController
     {
@@ -18,24 +19,31 @@
             this.postService = postService;
         }
 
-        [Route("admin/posts")]
+        [Route("posts")]
         public IActionResult Index()
+        {
+            return this.View();
+        }
+
+        [HttpGet]
+        [Route("posts/create")]
+        public IActionResult Create()
         {
             return this.View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("admin/screenwriters/create")]
-        public async Task<IActionResult> Create(object vm)
+        [Route("posts/create")]
+        public async Task<IActionResult> Create(CreatePostVM postModel)
         {
             if (!this.ModelState.IsValid)
             {
                 this.AddAlert(false, "An error has occured");
-                return this.View();
+                return this.View(postModel);
             }
 
-            var post = Mapper.Map<Post>(vm);
+            var post = Mapper.Map<Post>(postModel);
 
             await this.postService.Create(post);
 
