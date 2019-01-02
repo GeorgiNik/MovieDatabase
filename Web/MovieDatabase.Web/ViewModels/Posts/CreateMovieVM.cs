@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Http;
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
@@ -28,7 +28,8 @@
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
-        public string PosterImageLink { get; set; }
+        [FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Allowed extensions are: jpg, jpeg and png")]
+        public IFormFile PosterImage { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
         public string TrailerLink { get; set; }
@@ -43,9 +44,6 @@
         public string Language { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
-        public string CountryOfProduction { get; set; }
-
-        [Required(ErrorMessage = "Field is required")]
         public List<MovieActorVM> MovieActors { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
@@ -58,5 +56,9 @@
         public string ComposerId { get; set; }
 
         public string[] Awards { get; set; }
+
+        public double ImdbRating { get; set; }
+
+        public double Rating { get; set; }
     }
 }

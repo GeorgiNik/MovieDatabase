@@ -26,6 +26,7 @@
     //Public Property
     movieDbApp.createPostConfig = {
         getActorsUrl: '',
+        getImdbRatingUrl: '',
         actorHtml: {
             characterNameInput: '',
             actorIdInput: '',
@@ -52,6 +53,7 @@
 
         initActorButtonEvents();
         initAwardButtonEvents();
+        initGetImdbRatingEvent();
     };
 
     //Private Method
@@ -143,6 +145,41 @@
 
                 $('.award').last().remove();
             }
+        });
+    }
+
+    function initGetImdbRatingEvent() {
+        $('.movie-title').on('focusout', function (e) {
+            //if (!$('.imdb-rating').hasClass('hidden')) {
+            //    return;
+            //}
+
+            var movieTitle = $(this).val();
+            var url = movieDbApp.createPostConfig.getImdbRatingUrl;
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: { __RequestVerificationToken: token, title: movieTitle },
+                success: function (data) {
+                    var rating = data['imdbRating'];
+
+                    $('.rating-value').html(rating);
+                    $('.imdb-rating').removeClass('hidden');
+
+                    //set the hidden input val
+                    $('#imdb-rating').val(rating);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+
+                    if (!$('.imdb-rating').hasClass('hidden')) {
+                        $('.imdb-rating').addClass('hidden');
+                    }
+                }
+            });
+
         });
     }
 

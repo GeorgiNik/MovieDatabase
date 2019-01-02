@@ -24,6 +24,7 @@
     using MovieDatabase.Services.Identity;
     using MovieDatabase.Services.Implementation;
     using MovieDatabase.Services.Messaging.EmailSender;
+    using MovieDatabase.Services.Utils;
     using MovieDatabase.Web.ViewModels.Account;
 
     public class Startup
@@ -96,6 +97,7 @@
             });
 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.Configure<ImdbServiceSettings>(configuration.GetSection("ImdbServiceSettings"));
             services.AddSingleton(this.configuration);
 
             // Data repositories
@@ -104,6 +106,7 @@
 
             // Application services
             services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<ImdbService>();
             services.AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
             // Identity stores

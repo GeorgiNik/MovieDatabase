@@ -34,8 +34,6 @@ namespace MovieDatabase.Data.Models
 
         public string Language { get; set; }
 
-        public string CountryOfProduction { get; set; }
-
         public MovieDirector Director { get; set; }
 
         public MovieScreenwriter Screenwriter { get; set; }

@@ -263,3 +263,12 @@ span.twitter-typeahead {
 textarea {
     resize: vertical;
 }
+
+.imdb-rating{
+    margin-left:1rem;
+}
+
+.imdb-rating .fa{
+    font-size:3.4rem;
+    vertical-align:middle;
+}
