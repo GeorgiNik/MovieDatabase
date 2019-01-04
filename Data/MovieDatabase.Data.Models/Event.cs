@@ -12,7 +12,7 @@ namespace MovieDatabase.Data.Models
             this.Id = Guid.NewGuid().ToString();
         }
         
-        public ICollection<EventParticipant> Participants{ get; set; }
+        public virtual ICollection<EventParticipant> Participants{ get; set; }
 
         public string MovieId { get; set; }
 

@@ -12,6 +12,6 @@ namespace MovieDatabase.Data.Models
             this.Id = Guid.NewGuid().ToString();
         }
 
-        public virtual ICollection<MovieDirector> Directed { get; set; }
+        public virtual ICollection<Movie> Directed { get; set; }
     }
 }

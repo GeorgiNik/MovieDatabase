@@ -5,7 +5,7 @@ namespace MovieDatabase.Web.Areas.Admin.Models.MovieCategories
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
-    public class CreateMovieCategoryVM : IMapFrom<MovieCategory>
+    public class CreateMovieCategoryVM : IMapFrom<Category>
     {
         [Required]
         public string Name { get; set; }

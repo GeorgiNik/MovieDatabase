@@ -14,7 +14,7 @@ namespace MovieDatabase.Data.Models
 
         public string Slug { get; set; }
 
-        public MovieCategory MovieCategory { get; set; }
+        public virtual ICollection<MovieCategory> Categories { get; set; } = new HashSet<MovieCategory>();
 
         public DateTime ReleaseDate { get; set; }
 
@@ -34,21 +34,27 @@ namespace MovieDatabase.Data.Models
 
         public string Language { get; set; }
 
-        public MovieDirector Director { get; set; }
+        public string DirectorId { get; set; }
 
-        public MovieScreenwriter Screenwriter { get; set; }
+        public virtual Director Director { get; set; }
 
-        public MovieComposer Composer { get; set; }
+        public string ScreenwriterId { get; set; }
 
-        public ICollection<Award> Awards { get; set; } = new HashSet<Award>();
+        public virtual Screenwriter Screenwriter { get; set; }
 
-        public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+        public string ComposerId { get; set; }
 
-        public ICollection<Keyword> Keywords { get; set; } = new HashSet<Keyword>();
+        public virtual Composer Composer { get; set; }
 
-        public ICollection<MovieActor> Actors { get; set; }
+        public virtual ICollection<Award> Awards { get; set; } = new HashSet<Award>();
 
-        public ICollection<MovieRating> Ratings { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+
+        public virtual ICollection<Keyword> Keywords { get; set; } = new HashSet<Keyword>();
+
+        public virtual ICollection<MovieActor> Actors { get; set; } = new HashSet<MovieActor>();
+
+        public virtual ICollection<MovieRating> Ratings { get; set; } = new HashSet<MovieRating>();
 
         public virtual ICollection<UserWishlist> UserWishlists { get; set; } = new HashSet<UserWishlist>();
 

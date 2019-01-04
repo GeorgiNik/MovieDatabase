@@ -22,9 +22,9 @@
 
     public class MovieCategoriesController : EntityListController
     {
-        private ICrudService<MovieCategory> movieCategoryService;
+        private ICrudService<Category> movieCategoryService;
 
-        public MovieCategoriesController(ICrudService<MovieCategory> movieCategoryService)
+        public MovieCategoriesController(ICrudService<Category> movieCategoryService)
         {
             this.movieCategoryService = movieCategoryService;
         }
@@ -77,7 +77,7 @@
                 return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
             }
 
-            var movieCategory = Mapper.Map<MovieCategory>(vm.MovieCategory);
+            var movieCategory = Mapper.Map<Category>(vm.MovieCategory);
             movieCategory.Slug = SlugGenerator.GenerateSlug(movieCategory.Name);
 
             try

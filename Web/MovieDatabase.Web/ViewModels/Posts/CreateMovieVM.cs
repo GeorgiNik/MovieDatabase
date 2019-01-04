@@ -13,9 +13,8 @@
     {
         [Required(ErrorMessage = "Field is required")]
         public string Name { get; set; }
-
-        [Required(ErrorMessage = "Field is required")]
-        public string MovieCategoryId { get; set; }
+        
+        public List<MovieCategoryVM> Categories { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
         public DateTime ReleaseDate { get; set; }
@@ -28,7 +27,7 @@
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
-        [FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Allowed extensions are: jpg, jpeg and png")]
+        //[FileExtensions(Extensions = "jpg,jpeg,png", ErrorMessage = "Allowed extensions are: jpg, jpeg and png")]
         public IFormFile PosterImage { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
@@ -44,7 +43,7 @@
         public string Language { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
-        public List<MovieActorVM> MovieActors { get; set; }
+        public List<MovieActorVM> Actors { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
         public string DirectorId { get; set; }
@@ -55,10 +54,15 @@
         [Required(ErrorMessage = "Field is required")]
         public string ComposerId { get; set; }
 
-        public string[] Awards { get; set; }
+        public List<MovieAwardVM> Awards { get; set; }
 
         public double ImdbRating { get; set; }
 
-        public double Rating { get; set; }
+        public MovieRatingVM Rating { get; set; }
+
+        public List<MovieKeywordVM> Keywords { get; set; }
+
+        [Required(ErrorMessage = "Field is required")]
+        public string KeywordsString { get; set; }
     }
 }

@@ -1,0 +1,33 @@
+﻿namespace MovieDatabase.Services.Utils
+{
+    using System;
+    using System.IO;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+
+    public static class FileManager
+    {
+        public static async Task<string> SaveFile(IHostingEnvironment environment, IFormFile file)
+        {
+            var uploads = Path.Combine(environment.WebRootPath, "uploads");
+
+            if (file.Length > 0)
+            {
+                var filePath = Path.Combine(uploads, Guid.NewGuid().ToString(), file.FileName);
+
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+
+                    return filePath;
+                }
+            }
+
+            return null;
+        }
+    }
+}

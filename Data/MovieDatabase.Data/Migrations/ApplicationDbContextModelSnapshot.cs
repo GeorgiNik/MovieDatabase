@@ -256,6 +256,34 @@ namespace MovieDatabase.Data.Migrations
                     b.ToTable("Award");
                 });
 
+            modelBuilder.Entity("MovieDatabase.Data.Models.Category", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Slug");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasFilter("[Slug] IS NOT NULL");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("MovieDatabase.Data.Models.Comment", b =>
                 {
                     b.Property<string>("Id")
@@ -428,6 +456,8 @@ namespace MovieDatabase.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ComposerId");
+
                     b.Property<string>("Country");
 
                     b.Property<DateTime>("CreatedOn");
@@ -435,6 +465,8 @@ namespace MovieDatabase.Data.Migrations
                     b.Property<DateTime?>("DeletedOn");
 
                     b.Property<string>("Description");
+
+                    b.Property<string>("DirectorId");
 
                     b.Property<string>("Duration");
 
@@ -446,13 +478,13 @@ namespace MovieDatabase.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("MovieCategoryId");
-
                     b.Property<string>("Name");
 
                     b.Property<string>("PosterImageLink");
 
                     b.Property<DateTime>("ReleaseDate");
+
+                    b.Property<string>("ScreenwriterId");
 
                     b.Property<string>("Slug");
 
@@ -462,9 +494,17 @@ namespace MovieDatabase.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ComposerId");
+
+                    b.HasIndex("DirectorId");
+
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("MovieCategoryId");
+                    b.HasIndex("ScreenwriterId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique()
+                        .HasFilter("[Slug] IS NOT NULL");
 
                     b.ToTable("Movies");
                 });
@@ -486,68 +526,15 @@ namespace MovieDatabase.Data.Migrations
 
             modelBuilder.Entity("MovieDatabase.Data.Models.MovieCategory", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Slug");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.HasIndex("Slug")
-                        .IsUnique()
-                        .HasFilter("[Slug] IS NOT NULL");
-
-                    b.ToTable("MovieCategories");
-                });
-
-            modelBuilder.Entity("MovieDatabase.Data.Models.MovieComposer", b =>
-                {
                     b.Property<string>("MovieId");
 
-                    b.Property<string>("ComposerId");
+                    b.Property<string>("CategoryId");
 
-                    b.Property<string>("MovieId1");
+                    b.HasKey("MovieId", "CategoryId");
 
-                    b.HasKey("MovieId", "ComposerId");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("MovieId1")
-                        .IsUnique()
-                        .HasFilter("[MovieId1] IS NOT NULL");
-
-                    b.ToTable("MovieComposer");
-                });
-
-            modelBuilder.Entity("MovieDatabase.Data.Models.MovieDirector", b =>
-                {
-                    b.Property<string>("MovieId");
-
-                    b.Property<string>("DirectorId");
-
-                    b.Property<string>("MovieId1");
-
-                    b.HasKey("MovieId", "DirectorId");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("MovieId1")
-                        .IsUnique()
-                        .HasFilter("[MovieId1] IS NOT NULL");
-
-                    b.ToTable("MovieDirector");
+                    b.ToTable("MovieCategory");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.MovieRating", b =>
@@ -561,25 +548,6 @@ namespace MovieDatabase.Data.Migrations
                     b.HasIndex("MovieId");
 
                     b.ToTable("MovieRating");
-                });
-
-            modelBuilder.Entity("MovieDatabase.Data.Models.MovieScreenwriter", b =>
-                {
-                    b.Property<string>("MovieId");
-
-                    b.Property<string>("ScreenwriterId");
-
-                    b.Property<string>("MovieId1");
-
-                    b.HasKey("MovieId", "ScreenwriterId");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("MovieId1")
-                        .IsUnique()
-                        .HasFilter("[MovieId1] IS NOT NULL");
-
-                    b.ToTable("MovieScreenwriter");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.Post", b =>
@@ -617,6 +585,16 @@ namespace MovieDatabase.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<DateTime?>("ModifiedOn");
+
+                    b.Property<string>("Name");
+
                     b.Property<string>("RatedById");
 
                     b.Property<DateTime>("RatedOn");
@@ -624,6 +602,8 @@ namespace MovieDatabase.Data.Migrations
                     b.Property<double>("Score");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("RatedById");
 
@@ -817,46 +797,43 @@ namespace MovieDatabase.Data.Migrations
 
             modelBuilder.Entity("MovieDatabase.Data.Models.Movie", b =>
                 {
-                    b.HasOne("MovieDatabase.Data.Models.MovieCategory", "MovieCategory")
-                        .WithMany()
-                        .HasForeignKey("MovieCategoryId");
+                    b.HasOne("MovieDatabase.Data.Models.Composer", "Composer")
+                        .WithMany("Composed")
+                        .HasForeignKey("ComposerId");
+
+                    b.HasOne("MovieDatabase.Data.Models.Director", "Director")
+                        .WithMany("Directed")
+                        .HasForeignKey("DirectorId");
+
+                    b.HasOne("MovieDatabase.Data.Models.Screenwriter", "Screenwriter")
+                        .WithMany("Written")
+                        .HasForeignKey("ScreenwriterId");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.MovieActor", b =>
                 {
-                    b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
-                        .WithMany("Actors")
+                    b.HasOne("MovieDatabase.Data.Models.Actor", "Actor")
+                        .WithMany("StaredIn")
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MovieDatabase.Data.Models.Actor", "Actor")
-                        .WithMany("StaredIn")
+                    b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
+                        .WithMany("Actors")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("MovieDatabase.Data.Models.MovieComposer", b =>
+            modelBuilder.Entity("MovieDatabase.Data.Models.MovieCategory", b =>
                 {
-                    b.HasOne("MovieDatabase.Data.Models.Composer", "Composer")
-                        .WithMany("Composed")
-                        .HasForeignKey("MovieId")
+                    b.HasOne("MovieDatabase.Data.Models.Category", "Category")
+                        .WithMany("MoviesList")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
-                        .WithOne("Composer")
-                        .HasForeignKey("MovieDatabase.Data.Models.MovieComposer", "MovieId1");
-                });
-
-            modelBuilder.Entity("MovieDatabase.Data.Models.MovieDirector", b =>
-                {
-                    b.HasOne("MovieDatabase.Data.Models.Director", "Director")
-                        .WithMany("Directed")
+                        .WithMany("Categories")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
-                        .WithOne("Director")
-                        .HasForeignKey("MovieDatabase.Data.Models.MovieDirector", "MovieId1");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.MovieRating", b =>
@@ -870,18 +847,6 @@ namespace MovieDatabase.Data.Migrations
                         .WithMany("MovieRatings")
                         .HasForeignKey("RatingId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("MovieDatabase.Data.Models.MovieScreenwriter", b =>
-                {
-                    b.HasOne("MovieDatabase.Data.Models.Screenwriter", "Screenwriter")
-                        .WithMany("Written")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
-                        .WithOne("Screenwriter")
-                        .HasForeignKey("MovieDatabase.Data.Models.MovieScreenwriter", "MovieId1");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.Post", b =>

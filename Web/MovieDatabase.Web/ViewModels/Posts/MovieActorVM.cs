@@ -9,10 +9,10 @@
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
-    public class MovieActorVM
+    public class MovieActorVM : IMapFrom<MovieActor>
     {
         [Required(ErrorMessage = "Field is required")]
-        public string Id { get; set; }
+        public string ActorId { get; set; }
 
         [Required(ErrorMessage = "Field is required")]
         public string CharacterName { get; set; }

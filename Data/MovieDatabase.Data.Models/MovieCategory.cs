@@ -1,9 +1,13 @@
 namespace MovieDatabase.Data.Models
 {
-    using MovieDatabase.Data.Common.Models;
-
-    public class MovieCategory : BaseDeletableModel<string>
+    public class MovieCategory
     {
-        public string Slug { get; set; }
+        public string MovieId { get; set; }
+
+        public Movie Movie { get; set; }
+
+        public Category Category { get; set; }
+        
+        public string CategoryId { get; set; }
     }
 }

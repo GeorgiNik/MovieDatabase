@@ -4,14 +4,14 @@ namespace MovieDatabase.Data.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class Rating
+    using MovieDatabase.Data.Common.Models;
+
+    public class Rating : BaseDeletableModel<string>
     {
         public Rating()
         {
             this.Id = Guid.NewGuid().ToString();
         }
-
-        public string Id { get; set; }
 
         public ApplicationUser RatedBy { get; set; }
 

@@ -4,12 +4,15 @@
     this.ViewData["Title"] = "New post";
 }
 
+<partial name="_StatusMessage" model="ViewBag.Alert" />
+
 <div class="page-intro">
     <h2>New post</h2>
 </div>
 
-<form class="form-custom" method="Post" asp-controller="Posts" asp-action="Create" id="add-post-form">
+<form class="form-custom" method="post" asp-controller="Posts" asp-action="Create" id="add-post-form" enctype="multipart/form-data">
     <input asp-for="Movie.ImdbRating" id="imdb-rating" hidden />
+    <input asp-for="Movie.Rating.Score" id="rating" hidden />
 
     <div class="panel panel-white col-xs-12">
         <div class="panel-body">
@@ -25,9 +28,30 @@
             </div>
 
             <div class="row mb-2x mt-2x">
-                <div class="section-heading col-xs-12">
+                <div class="section-heading col-xs-12 col-md-6">
                     Movie
                     <span class="imdb-rating hidden"><i class="fa fa-imdb"></i> <span class="rating-value"></span></span>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class='rating-stars text-right'>
+                        <ul id='stars'>
+                            <li class='star' title='Poor' data-value='1'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='Fair' data-value='2'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='Good' data-value='3'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='Excellent' data-value='4'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                            <li class='star' title='WOW!!!' data-value='5'>
+                                <i class='fa fa-star fa-fw'></i>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -54,12 +78,12 @@
                 <div class="col-xs-12 col-md-6">
                     <div class="md-input">
                         <label asp-for="Movie.PosterImage" class="md-input-placeholder">Poster</label>
-                        <input asp-for="Movie.PosterImage" asp-items="ViewBag.PosterImage" class="md-input-control" />
+                        <input asp-for="Movie.PosterImage" class="md-input-control" />
                     </div>
-                    <span asp-validation-for="Movie.MovieCategoryId" class="text-danger"></span>
+                    <span asp-validation-for="Movie.PosterImage" class="text-danger"></span>
                 </div>
                 <div class="col-xs-12 col-md-6">
-                    <div class="md-input" role="wrapper">
+                    <div class="md-input">
                         <label asp-for="Movie.TrailerLink" class="md-input-placeholder">Link to trailer</label>
                         <input asp-for="Movie.TrailerLink" class="md-input-control">
                     </div>
@@ -70,10 +94,10 @@
             <div class="form-group row mt-2x">
                 <div class="col-xs-12 col-md-4">
                     <div class="md-input">
-                        <label asp-for="Movie.MovieCategoryId" class="md-input-placeholder">Genre</label>
-                        <select asp-for="Movie.MovieCategoryId" asp-items="ViewBag.MovieCategories" class="md-input-control"></select>
+                        <label asp-for="Movie.Categories[0].CategoryId" class="md-input-placeholder">Genre</label>
+                        <select asp-for="Movie.Categories[0].CategoryId" asp-items="ViewBag.MovieCategories" class="md-input-control"></select>
                     </div>
-                    <span asp-validation-for="Movie.MovieCategoryId" class="text-danger"></span>
+                    <span asp-validation-for="Movie.Categories[0].CategoryId" class="text-danger"></span>
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="md-input" role="wrapper">
@@ -115,6 +139,15 @@
                 </div>
             </div>
 
+            <div class="form-group row">
+                <div class="col-xs-12">
+                    <div class="md-input">
+                        <label asp-for="Movie.KeywordsString" class="md-input-placeholder">Keywords</label>
+                        <input asp-for="Movie.KeywordsString" class="md-input-control">
+                    </div>
+                </div>
+            </div>
+
             <div class="row mb-2x mt-2x">
                 <div class="section-heading col-xs-12 text-center">Cast</div>
             </div>
@@ -153,14 +186,14 @@
                     <div class="md-input">
                         <input type="text" class="md-input-control typeahead">
                     </div>
-                    <span asp-validation-for="Movie.MovieActors[0].Id" class="text-danger"></span>
+                    <span asp-validation-for="Movie.Actors[0].ActorId" class="text-danger"></span>
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="md-input movie-actor">
-                        <input asp-for="Movie.MovieActors[0].CharacterName" class="md-input-control character-name">
-                        <input hidden asp-for="Movie.MovieActors[0].Id" class="actor-id" />
+                        <input asp-for="Movie.Actors[0].CharacterName" class="md-input-control character-name">
+                        <input hidden asp-for="Movie.Actors[0].ActorId" class="actor-id" />
                     </div>
-                    <span asp-validation-for="Movie.MovieActors[0].CharacterName" class="text-danger"></span>
+                    <span asp-validation-for="Movie.Actors[0].CharacterName" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row ">
@@ -177,7 +210,7 @@
             <div class="form-group row award">
                 <div class="col-xs-12">
                     <div class="md-input">
-                        <input asp-for="Movie.Awards[0]" class="md-input-control award-name">
+                        <input asp-for="Movie.Awards[0].Name" class="md-input-control award-name">
                     </div>
                 </div>
             </div>
@@ -211,6 +244,7 @@
     <environment names="Development,Staging,Production">
         <script src="~/lib/typeahead/typeahead.bundle.js"></script>
         <script src="~/lib/gijoe/gijoe.min.js"></script>
+        <script src="~/js/common/rating.js"></script>
         <script src="~/js/posts/create-post.js"></script>
     </environment>
     <script>
@@ -219,15 +253,17 @@
                 getActorsUrl: '@Url.Action("GetActors", "Actors", new { name = Html.Raw("QUERY") })',
                 getImdbRatingUrl: '@Url.Action("GetMovieImdbRating", "Posts")',
                 actorHtml: {
-                    characterNameInput: '@Html.TextBoxFor(m => m.Movie.MovieActors[-111].CharacterName, new { @class = "md-input-control character-name" })',
-                    actorIdInput: '@Html.HiddenFor(m=>m.Movie.MovieActors[-111].Id, new{ @class= "actor-id" })',
-                    characterNameValidation: '@Html.ValidationMessageFor(m=>m.Movie.MovieActors[-111].CharacterName, null, new {@class="text-danger" })'
+                    characterNameInput: '@Html.TextBoxFor(m => m.Movie.Actors[0].CharacterName, new { @class = "md-input-control character-name" })',
+                    actorIdInput: '@Html.HiddenFor(m=>m.Movie.Actors[0].ActorId, new{ @class= "actor-id" })',
+                    actorIdValidation: '@Html.ValidationMessageFor(m=>m.Movie.Actors[0].ActorId, null, new {@class="text-danger" })',
+                    characterNameValidation: '@Html.ValidationMessageFor(m=>m.Movie.Actors[0].CharacterName, null, new {@class="text-danger" })',
                 },
                 awardHtml: {
-                    awardInput: '@Html.TextBoxFor(m => m.Movie.Awards[-111], new { @class = "md-input-control" })'
+                    awardInput: '@Html.TextBoxFor(m => m.Movie.Awards[0].Name, new { @class = "md-input-control" })'
                 }
             }
 
+            movieDbApp.ratingInit();
             movieDbApp.init();
         })(window.movieDbApp);
 

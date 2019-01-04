@@ -4,6 +4,7 @@ namespace MovieDatabase.Data.Models
 {
     using System;
     using System.Collections.Generic;
+
     using Microsoft.AspNetCore.Identity;
     using MovieDatabase.Data.Common.Models;
 
@@ -46,7 +47,7 @@ namespace MovieDatabase.Data.Models
 
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
         
-        public ICollection<EventParticipant> Events { get; set; } = new List<EventParticipant>();
+        public virtual ICollection<EventParticipant> Events { get; set; } = new List<EventParticipant>();
 
         public virtual ICollection<UserRating> UserRatings { get; set; } = new HashSet<UserRating>();
     }

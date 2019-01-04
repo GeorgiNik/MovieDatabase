@@ -1,14 +1,14 @@
 ﻿namespace MovieDatabase.Data
 {
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+    using MovieDatabase.Data.Common.Models;
+    using MovieDatabase.Data.Models;
     using System;
     using System.Linq;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using MovieDatabase.Data.Common.Models;
-    using MovieDatabase.Data.Models;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -20,11 +20,14 @@
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            //Configuration.ProxyCreationEnabled = true;
         }
 
         public DbSet<Setting> Settings { get; set; }
 
         public DbSet<Actor> Actors { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
 
         public DbSet<Director> Directors { get; set; }
 
@@ -40,7 +43,7 @@
 
         public DbSet<Post> Posts { get; set; }
 
-        public DbSet<MovieCategory> MovieCategories { get; set; }
+        public DbSet<Category> MovieCategories { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -154,54 +157,46 @@
                 .WithMany(c => c.UserOwnedMovies)
                 .HasForeignKey(pc => pc.MovieId);
 
+            builder.Entity<MovieCategory>()
+                .HasKey(bc => new { bc.MovieId, bc.CategoryId });
+
             builder.Entity<MovieActor>()
                 .HasKey(bc => new { bc.MovieId, bc.ActorId });
 
-            builder.Entity<MovieDirector>()
-                .HasKey(bc => new { bc.MovieId, bc.DirectorId });
-
-            builder.Entity<MovieScreenwriter>()
-                .HasKey(bc => new { bc.MovieId, bc.ScreenwriterId });
-
-            builder.Entity<MovieComposer>()
-                .HasKey(bc => new { bc.MovieId, bc.ComposerId });
+            builder.Entity<MovieCategory>()
+                .HasOne(bc => bc.Category)
+                .WithMany(b => b.MoviesList)
+                .HasForeignKey(bc => bc.CategoryId);
 
             builder.Entity<MovieActor>()
                 .HasOne(bc => bc.Actor)
                 .WithMany(b => b.StaredIn)
-                .HasForeignKey(bc => bc.MovieId);
+                .HasForeignKey(bc => bc.ActorId);
 
-            builder.Entity<MovieDirector>()
-                .HasOne(bc => bc.Director)
-                .WithMany(b => b.Directed)
-                .HasForeignKey(bc => bc.MovieId);
+            builder.Entity<Director>()
+                .HasMany(bc => bc.Directed)
+                .WithOne(bc => bc.Director)
+                .HasForeignKey(bc => bc.DirectorId);
 
-            builder.Entity<MovieScreenwriter>()
-                .HasOne(bc => bc.Screenwriter)
-                .WithMany(b => b.Written)
-                .HasForeignKey(bc => bc.MovieId);
+            builder.Entity<Composer>()
+                .HasMany(bc => bc.Composed)
+                .WithOne(bc => bc.Composer)
+                .HasForeignKey(bc => bc.ComposerId);
 
-            builder.Entity<MovieComposer>()
-                .HasOne(bc => bc.Composer)
-                .WithMany(b => b.Composed)
+            builder.Entity<Screenwriter>()
+                .HasMany(bc => bc.Written)
+                .WithOne(bc => bc.Screenwriter)
+                .HasForeignKey(bc => bc.ScreenwriterId);
+
+            builder.Entity<MovieCategory>()
+                .HasOne(bc => bc.Movie)
+                .WithMany(c => c.Categories)
                 .HasForeignKey(bc => bc.MovieId);
 
             builder.Entity<MovieActor>()
                 .HasOne(bc => bc.Movie)
                 .WithMany(c => c.Actors)
-                .HasForeignKey(bc => bc.ActorId);
-
-            builder.Entity<MovieDirector>()
-                .HasOne(bc => bc.Movie)
-                .WithOne(c => c.Director);
-
-            builder.Entity<MovieScreenwriter>()
-                .HasOne(bc => bc.Movie)
-                .WithOne(c => c.Screenwriter);
-
-            builder.Entity<MovieComposer>()
-                .HasOne(bc => bc.Movie)
-                .WithOne(c => c.Composer);
+                .HasForeignKey(bc => bc.MovieId);
 
             builder.Entity<EventParticipant>()
                 .HasKey(bc => new { bc.UserId, bc.EventId });
@@ -219,11 +214,11 @@
 
         private static void ConfigureConstraints(ModelBuilder builder)
         {
-            //builder.Entity<Movie>()
-            //    .HasIndex(u => u.Slug)
-            //    .IsUnique();
+            builder.Entity<Movie>()
+                .HasIndex(u => u.Slug)
+                .IsUnique();
 
-            builder.Entity<MovieCategory>()
+            builder.Entity<Category>()
                 .HasIndex(u => u.Slug)
                 .IsUnique();
         }
