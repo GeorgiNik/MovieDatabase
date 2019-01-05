@@ -14,8 +14,6 @@
         [Required(ErrorMessage = "Field is required")]
         public string ActorId { get; set; }
 
-        public string ActorName { get; set; }
-
         [Required(ErrorMessage = "Field is required")]
         public string CharacterName { get; set; }
     }

@@ -22,10 +22,12 @@
     public class UsersController : EntityListController
     {
         private ApplicationUserManager<ApplicationUser> userManager;
+        private ICrudService<Post> postService;
 
-        public UsersController(ApplicationUserManager<ApplicationUser> userManager)
+        public UsersController(ApplicationUserManager<ApplicationUser> userManager, ICrudService<Post> postService)
         {
             this.userManager = userManager;
+            this.postService = postService;
         }
 
         [HttpGet]
@@ -93,6 +95,8 @@
 
             IdentityResult result = await this.userManager.ActivateUserAsync(userId);
 
+            await this.postService.Delete(this.postService.GetAllWithDeleted().Where(p => p.UserId == userId));
+
             this.AddAlert(true, "User account successfully activated");
 
             return this.RedirectToAction("UserProfile", "Users", new { userId });
@@ -109,6 +113,8 @@
             }
 
             IdentityResult result = await this.userManager.DeactivateUserAsync(userId);
+
+            await this.postService.Restore(this.postService.GetAllWithDeleted().Where(p => p.UserId == userId));
 
             this.AddAlert(true, "User account successfully deactivated");
 

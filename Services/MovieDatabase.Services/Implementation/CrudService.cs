@@ -58,15 +58,26 @@ namespace MovieDatabase.Services.Implementation
         public async Task<bool> Delete (string id)
         {
             var entity = await this.data.GetByIdAsync(id);
-            
+
             if (entity != null)
             {
                 this.data.Delete(entity);
                 await this.data.SaveChangesAsync();
                 return true;
             }
-            
+
             return false;
+        }
+
+        public async Task<bool> Delete(IQueryable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.data.Delete(entity);
+            }
+
+            await this.data.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> Restore(string id)
@@ -83,10 +94,21 @@ namespace MovieDatabase.Services.Implementation
             return false;
         }
 
+        public async Task<bool> Restore(IQueryable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                this.data.Undelete(entity);
+            }
+
+            await this.data.SaveChangesAsync();
+            return true;
+        }
+
         public Task<bool> Exists(string name)
         {
-            var exists =  this.data.All().AnyAsync(x => x.Name == name);
-            
+            var exists = this.data.All().AnyAsync(x => x.Name == name);
+
             return exists;
         }
     }

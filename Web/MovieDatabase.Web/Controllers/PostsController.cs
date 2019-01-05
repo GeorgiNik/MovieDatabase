@@ -192,20 +192,37 @@
 
         private void LoadListMoviesDropdowns(PostFilterVM postFilter)
         {
+            this.ViewBag.OrderBy = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Alphabetical", Value = "alphabetical", Selected = postFilter.OrderBy == "alphabetical" },
+                new SelectListItem { Text = "Category", Value = "category", Selected = postFilter.OrderBy == "category" },
+                new SelectListItem { Text = "Rating", Value = "rating", Selected = postFilter.OrderBy == "rating" },
+            };
+
+            this.ViewBag.Ratings = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "0", Value = "0", Selected = postFilter.RatingAbove == 0 },
+                new SelectListItem { Text = "1", Value = "1", Selected = postFilter.RatingAbove == 1 },
+                new SelectListItem { Text = "2", Value = "2", Selected = postFilter.RatingAbove == 2 },
+                new SelectListItem { Text = "3", Value = "3", Selected = postFilter.RatingAbove == 4 },
+                new SelectListItem { Text = "4", Value = "4", Selected = postFilter.RatingAbove == 4 },
+                new SelectListItem { Text = "5", Value = "5", Selected = postFilter.RatingAbove == 5 },
+            };
+
             this.ViewBag.MovieCategories = this.movieCategoryService.GetAll().OrderBy(e => e.Name)
                 .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower(), Selected = postFilter.MovieCategory == e.Name.ToLower() })
                 .ToList();
 
             this.ViewBag.Directors = this.directorService.GetAll().OrderBy(e => e.Name)
-                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower() })
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower(), Selected = postFilter.MovieDirector == e.Name.ToLower() })
                 .ToList();
 
             this.ViewBag.Screenwriters = this.screenwriterService.GetAll().OrderBy(e => e.Name)
-                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower() })
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower(), Selected = postFilter.MovieScreenwriter == e.Name.ToLower() })
                 .ToList();
 
             this.ViewBag.Composers = this.composerService.GetAll().OrderBy(e => e.Name)
-                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower() })
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower(), Selected = postFilter.MovieComposer == e.Name.ToLower() })
                 .ToList();
         }
 
@@ -240,6 +257,8 @@
                 }
             }
 
+            query = query.Where(q => q.Movie.Ratings.Average(m => m.Rating.Score) >= filter.RatingAbove);
+
             if (!string.IsNullOrWhiteSpace(filter.MovieName))
             {
                 query = query.Where(q => q.Movie.Name.ToLower().Contains(filter.MovieName.ToLower().Trim()));
@@ -248,6 +267,26 @@
             if (!string.IsNullOrWhiteSpace(filter.MovieCategory))
             {
                 query = query.Where(q => q.Movie.Categories.First().Category.Name.ToLower() == filter.MovieCategory);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.MovieDirector))
+            {
+                query = query.Where(q => q.Movie.Director.Name.ToLower() == filter.MovieDirector.ToLower());
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.MovieComposer))
+            {
+                query = query.Where(q => q.Movie.Composer.Name.ToLower() == filter.MovieComposer.ToLower());
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.MovieScreenwriter))
+            {
+                query = query.Where(q => q.Movie.Screenwriter.Name.ToLower() == filter.MovieScreenwriter.ToLower());
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Keyword))
+            {
+                query = query.Where(q => q.Movie.Keywords.Any(k => k.Name == filter.Keyword));
             }
 
             return query;

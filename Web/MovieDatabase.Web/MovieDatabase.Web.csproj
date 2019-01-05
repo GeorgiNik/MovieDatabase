@@ -48,6 +48,9 @@
     <Content Update="Areas\Admin\Views\Directors\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\Admin\Views\Posts\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Admin\Views\Screenwriters\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -26,10 +26,58 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-md-6 text-left">
-                    <a href="#">Advanced search <i class="fa fa-caret-right"></i></a>
+                <div class="col-xs-12 text-left toggle">
+                    <a href="#" class="toggle-advanced-search open-panel">Advanced search <i class="fa fa-caret-right"></i></a>
+                    <a href="#" class="toggle-advanced-search close-panel" style="display:none;">Advanced search <i class="fa fa-caret-down"></i></a>
                 </div>
             </div>
+
+            <div class="advanced-search" style="display:none;">
+                <div class="form-group row">
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="keyword" class="md-input-placeholder">Keyword</label>
+                            <input type="text" id="keyword" name="keyword" class="md-input-control" value="@Context.Request.Query["keyword"]">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="ratingAbove" class="md-input-placeholder">Rating above</label>
+                            <select name="ratingAbove" asp-items="ViewBag.Ratings" class="md-input-control">
+                                <option value=" ">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="movieDirector" class="md-input-placeholder">Movie director</label>
+                            <select name="movieDirector" asp-items="ViewBag.Directors" class="md-input-control">
+                                <option value=" ">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="movieScreenwriter" class="md-input-placeholder">Movie screenwriter</label>
+                            <select name="movieScreenwriter" asp-items="ViewBag.Screenwriters" class="md-input-control">
+                                <option value=" ">All</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-12 col-md-3">
+                        <div class="md-input">
+                            <label for="movieComposer" class="md-input-placeholder">Movie composer</label>
+                            <select name="movieComposer" asp-items="ViewBag.Composers" class="md-input-control">
+                                <option value=" ">All</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="form-group row">
                 <div class="text-right">
                     <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
@@ -44,11 +92,7 @@
     <div class="text-right mb-0p5">
         <div class="md-input input-inline">
             <label for="orderBy" class="md-input-placeholder">Order by</label>
-            <select id="orderBy" name="orderBy" class="md-input-control" onchange="$('#filter-form').submit()">
-                <option value="alphabetical" selected="@(Context.Request.Query["orderBy"] == "alphabetical" ? "selected" : null)">Alphabetical</option>
-                <option value="category" selected="@(Context.Request.Query["orderBy"] == "category" ? "selected" : null)">Category</option>
-                <option value="rating" selected="@(Context.Request.Query["orderBy"] == "rating" ? "selected" : null)">Movie rating</option>
-            </select>
+            <select name="orderBy" asp-items="ViewBag.OrderBy" class="md-input-control" onchange="$('#filter-form').submit()"></select>
         </div>
         <div class="md-input input-inline">
             <label for="pageSize" class="md-input-placeholder">Show</label>
@@ -119,6 +163,12 @@
                                                pageSize = Context.Request.Query["pageSize"],
                                                orderBy = Context.Request.Query["orderBy"],
                                                movieName = Context.Request.Query["movieName"],
+                                               keyword = Context.Request.Query["keyword"],
+                                               ratingAbove = Context.Request.Query["ratingAbove"],
+                                               movieCategory = Context.Request.Query["movieCategory"],
+                                               movieDirector = Context.Request.Query["movieDirector"],
+                                               movieScreenwriter = Context.Request.Query["movieScreenwriter"],
+                                               movieComposer = Context.Request.Query["movieComposer"],
                                            })" class="pagination-prev" aria-label="Previous"></a>
             </li>
             @for (int i = 1; i <= Model.TotalPages; i++)
@@ -131,6 +181,12 @@
                                                pageSize = Context.Request.Query["pageSize"],
                                                orderBy = Context.Request.Query["orderBy"],
                                                movieName = Context.Request.Query["movieName"],
+                                               keyword = Context.Request.Query["keyword"],
+                                               ratingAbove = Context.Request.Query["ratingAbove"],
+                                               movieCategory = Context.Request.Query["movieCategory"],
+                                               movieDirector = Context.Request.Query["movieDirector"],
+                                               movieScreenwriter = Context.Request.Query["movieScreenwriter"],
+                                               movieComposer = Context.Request.Query["movieComposer"],
                                            })">
                             @i
                         </a>
@@ -144,6 +200,12 @@
                                                pageSize = Context.Request.Query["pageSize"],
                                                orderBy = Context.Request.Query["orderBy"],
                                                movieName = Context.Request.Query["movieName"],
+                                               keyword = Context.Request.Query["keyword"],
+                                               ratingAbove = Context.Request.Query["ratingAbove"],
+                                               movieCategory = Context.Request.Query["movieCategory"],
+                                               movieDirector = Context.Request.Query["movieDirector"],
+                                               movieScreenwriter = Context.Request.Query["movieScreenwriter"],
+                                               movieComposer = Context.Request.Query["movieComposer"],
                                            })">
                             @i
                         </a>
@@ -157,8 +219,38 @@
                                                pageSize = Context.Request.Query["pageSize"],
                                                orderBy = Context.Request.Query["orderBy"],
                                                movieName = Context.Request.Query["movieName"],
+                                               keyword = Context.Request.Query["keyword"],
+                                               ratingAbove = Context.Request.Query["ratingAbove"],
+                                               movieCategory = Context.Request.Query["movieCategory"],
+                                               movieDirector = Context.Request.Query["movieDirector"],
+                                               movieScreenwriter = Context.Request.Query["movieScreenwriter"],
+                                               movieComposer = Context.Request.Query["movieComposer"],
                                            })" class="pagination-next" aria-label="Next"></a>
             </li>
         </ul>
     </nav>
+}
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+
+            $('.toggle-advanced-search').on('click', function (e) {
+                if ($(this).hasClass("open-panel")) {
+                    $(".advanced-search").slideDown("slow");
+                }
+                else if ($(this).hasClass("close-panel")) {
+                    $(".advanced-search").slideUp("slow");
+                }
+                else {
+                    $(".advanced-search").slideUp("slow");
+                }
+            });
+
+            $(".toggle a").click(function () {
+                $(".toggle a").toggle();
+            });
+
+        });
+    </script>
 }

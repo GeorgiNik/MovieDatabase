@@ -23,10 +23,12 @@
     public class MovieCategoriesController : EntityListController
     {
         private ICrudService<Category> movieCategoryService;
+        private ICrudService<Post> postService;
 
-        public MovieCategoriesController(ICrudService<Category> movieCategoryService)
+        public MovieCategoriesController(ICrudService<Category> movieCategoryService, ICrudService<Post> postService)
         {
             this.movieCategoryService = movieCategoryService;
+            this.postService = postService;
         }
 
         [HttpGet]
@@ -111,6 +113,8 @@
 
             await this.movieCategoryService.Delete(movieCategoryId);
 
+            await this.postService.Delete(this.postService.GetAllWithDeleted().Where(p => p.Movie.Categories.First().CategoryId == movieCategoryId));
+
             this.AddAlert(true, "Successfully deleted movie category");
 
             return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
@@ -129,6 +133,8 @@
             PaginationVM pagination = this.GetCurrentPagination();
 
             await this.movieCategoryService.Restore(movieCategoryId);
+
+            await this.postService.Restore(this.postService.GetAllWithDeleted().Where(p => p.Movie.Categories.First().CategoryId == movieCategoryId));
 
             this.AddAlert(true, "Successfully restored movie category");
 

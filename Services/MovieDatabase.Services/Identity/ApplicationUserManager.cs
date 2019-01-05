@@ -65,6 +65,44 @@
             return await this.UpdateAsync(user);
         }
 
+        public async Task<IdentityResult> DeleteUserAsync(string userId)
+        {
+            if (userId == null)
+            {
+                throw new InvalidOperationException("userId");
+            }
+
+            ApplicationUser user = await this.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("user");
+            }
+
+            user.IsDeleted = true;
+
+            return await this.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> RestoreUserAsync(string userId)
+        {
+            if (userId == null)
+            {
+                throw new InvalidOperationException("userId");
+            }
+
+            ApplicationUser user = await this.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("user");
+            }
+
+            user.IsDeleted = false;
+
+            return await this.UpdateAsync(user);
+        }
+
         public async Task<IdentityResult> UnlockUserAsync(string userId)
         {
             if (userId == null)
