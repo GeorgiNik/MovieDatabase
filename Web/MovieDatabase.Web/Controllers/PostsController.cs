@@ -156,6 +156,27 @@
             return this.RedirectToAction("Index");
         }
 
+        [Route("posts/post/{postId}")]
+        public IActionResult Post(string postId)
+        {
+            if (this.HasAlert)
+            {
+                this.SetAlertModel();
+            }
+
+            var postModel = this.postService.GetAll().Where(p => p.Id == postId).ProjectTo<PostVM>().FirstOrDefault();
+
+            if (postModel == null)
+            {
+                return this.NotFound("Post not found");
+            }
+
+            postModel.Movie.PosterImageRelativeLink = FileManager.GetRelativeFilePath(postModel.Movie.PosterImageLink);
+            postModel.Movie.OverallRating = postModel.Movie.Ratings.Any() ? postModel.Movie.Ratings.Average(s => s.Rating.Score) : 0;
+
+            return this.View(postModel);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("posts/get-imdb-rating")]

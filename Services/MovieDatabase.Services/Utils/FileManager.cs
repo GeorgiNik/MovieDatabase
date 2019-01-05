@@ -33,7 +33,7 @@
 
         public static string GetRelativeFilePath(string absolutePath)
         {
-            return Path.Combine("uploads", Path.GetFileName(Path.GetDirectoryName(absolutePath)), Path.GetFileName(absolutePath));
+            return Path.Combine(Path.DirectorySeparatorChar.ToString(), "uploads", Path.GetFileName(Path.GetDirectoryName(absolutePath)), Path.GetFileName(absolutePath));
         }
     }
 }

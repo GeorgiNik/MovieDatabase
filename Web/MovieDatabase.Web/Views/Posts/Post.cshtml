@@ -1,0 +1,73 @@
+﻿@model MovieDatabase.Web.ViewModels.Posts.PostVM
+
+@{
+    this.ViewData["Title"] = Model.Name;
+}
+<div class="page-intro">
+    <h2>@Model.Name</h2>
+    <div class="post-meta text-right">
+        Posted by @Model.User.Firstname @Model.User.Lastname on @Model.CreatedOn.ToString("dd/MM/yyyy mm:hh")
+    </div>
+</div>
+
+<div class="panel panel-white mb post-panel">
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-5">
+                <img src="@Url.Content(@Model.Movie.PosterImageRelativeLink)" alt="@Model.Movie.Name" />
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <div class="movie-title">
+                    <span class="movie-rating"><i class="fa fa-star"></i> @Model.Movie.OverallRating.ToString("0.0")</span>
+                    @Model.Movie.Name
+                    <span class="imdb-rating pull-right"><i class="fa fa-imdb"></i> @Model.Movie.ImdbRating.ToString("0.0")</span>
+                </div>
+                <div class="movie-category">
+                    @Model.Movie.Categories.First().Category.Name
+                </div>
+                <div class="movie-description mt">
+                    @Model.Movie.Description
+                    <br />
+                    <a href="@Model.Movie.TrailerLink" target="_blank">See trailer</a>
+                </div>
+                <div class="movie-keywords mt">
+                    @foreach (var keyword in Model.Movie.Keywords)
+                    {
+                        <label class="label label-light">@keyword.Name</label>
+                    }
+                </div>
+                <div class="movie-meta mt">
+                    Directed by @Model.Movie.Director.Name
+                    <br />
+                    Screenplay @Model.Movie.Screenwriter.Name
+                    <br />
+                    Music @Model.Movie.Composer.Name
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div class="panel panel-white mt post-panel col-xs-12 col-md-5">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="section-heading text-center mb">Cast</div>
+                @foreach (var actor in Model.Movie.Actors)
+                {
+                    <div class="cast-member">
+                        <span class="pull-left">@actor.Actor.Name</span>
+                        <span class="pull-right">@actor.CharacterName</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+}

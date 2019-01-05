@@ -87,6 +87,9 @@
     <Content Update="Views\Posts\Create.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Posts\Post.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Posts\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
