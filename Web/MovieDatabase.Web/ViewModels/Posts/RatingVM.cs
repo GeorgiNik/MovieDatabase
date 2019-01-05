@@ -5,8 +5,9 @@
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
-    public class MovieRatingVM : IMapFrom<MovieRating>
+    public class RatingVM : IMapFrom<Rating>
     {
-        public RatingVM Rating { get; set; }
+        [Required(ErrorMessage = "Field is required")]
+        public double Score { get; set; }
     }
 }

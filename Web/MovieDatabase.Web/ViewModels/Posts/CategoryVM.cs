@@ -5,8 +5,8 @@
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
-    public class MovieRatingVM : IMapFrom<MovieRating>
+    public class CategoryVM : IMapFrom<Category>
     {
-        public RatingVM Rating { get; set; }
+        public string Name { get; set; }
     }
 }

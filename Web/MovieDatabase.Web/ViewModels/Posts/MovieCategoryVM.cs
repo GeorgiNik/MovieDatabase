@@ -9,5 +9,7 @@
     {
         [Required(ErrorMessage = "Field is required")]
         public string CategoryId { get; set; }
+
+        public CategoryVM Category { get; set; }
     }
 }

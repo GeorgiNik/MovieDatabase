@@ -20,9 +20,9 @@
 
     public class ScreenwritersController : EntityListController
     {
-        private ICrudService<Screenwriter> screenwriterService;
+        private ICrudService<Director> screenwriterService;
 
-        public ScreenwritersController(ICrudService<Screenwriter> screenwriterService)
+        public ScreenwritersController(ICrudService<Director> screenwriterService)
         {
             this.screenwriterService = screenwriterService;
         }
@@ -75,7 +75,7 @@
                 return this.RedirectToAction("Index", new { pagination.Page, pagination.PageSize, name = this.Request.Query["name"] });
             }
 
-            var screenwriter = Mapper.Map<Screenwriter>(vm.Screenwriter);
+            var screenwriter = Mapper.Map<Director>(vm.Screenwriter);
 
             await this.screenwriterService.Create(screenwriter);
 

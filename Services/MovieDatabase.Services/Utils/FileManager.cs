@@ -23,11 +23,17 @@
                 {
                     await file.CopyToAsync(fileStream);
 
+
                     return filePath;
                 }
             }
 
             return null;
+        }
+
+        public static string GetRelativeFilePath(string absolutePath)
+        {
+            return Path.Combine("uploads", Path.GetFileName(Path.GetDirectoryName(absolutePath)), Path.GetFileName(absolutePath));
         }
     }
 }

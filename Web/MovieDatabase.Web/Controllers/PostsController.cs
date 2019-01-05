@@ -3,10 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,9 +18,10 @@
     using MovieDatabase.Services.Identity;
     using MovieDatabase.Services.Utils;
     using MovieDatabase.Web.Controllers.Base;
+    using MovieDatabase.Web.ViewModels;
     using MovieDatabase.Web.ViewModels.Posts;
 
-    public class PostsController : BaseController
+    public class PostsController : EntityListController
     {
         private IHostingEnvironment hostingEnvironment;
         private ApplicationUserManager<ApplicationUser> userManager;
@@ -55,16 +58,38 @@
         }
 
         [Route("posts")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index(PaginationVM pagination, PostFilterVM postFilter)
         {
             if (this.HasAlert)
             {
                 this.SetAlertModel();
             }
 
-            var posts = this.postService.GetAll().Include(s => s.Movie).ToList();
+            var postsQuery = this.FilterPosts(postFilter, this.postService.GetAll().ProjectTo<PostVM>());
 
-            return this.View();
+            var paginatedPosts = this.PaginateList<PostVM>(pagination, postsQuery).ToList();
+
+            foreach (var post in paginatedPosts)
+            {
+                post.Movie.PosterImageRelativeLink = FileManager.GetRelativeFilePath(post.Movie.PosterImageLink);
+                post.Movie.OverallRating = post.Movie.Ratings.Any() ? post.Movie.Ratings.Average(s => s.Rating.Score) : 0;
+            }
+
+            int totalPages = this.GetTotalPages(pagination.PageSize, postsQuery.Count());
+
+            PostListVM postListViewModel = new PostListVM
+            {
+                Posts = paginatedPosts,
+                NextPage = pagination.Page < totalPages ? pagination.Page + 1 : pagination.Page,
+                PreviousPage = pagination.Page > 1 ? pagination.Page - 1 : pagination.Page,
+                CurrentPage = pagination.Page,
+                TotalPages = totalPages,
+                ShowPagination = totalPages > 1,
+            };
+
+            this.LoadListMoviesDropdowns(postFilter);
+
+            return this.View(postListViewModel);
         }
 
         [HttpGet]
@@ -163,6 +188,69 @@
             this.ViewBag.Composers = this.composerService.GetAll().OrderBy(e => e.Name)
                 .Select(e => new SelectListItem { Text = e.Name, Value = e.Id })
                 .ToList();
+        }
+
+        private void LoadListMoviesDropdowns(PostFilterVM postFilter)
+        {
+            this.ViewBag.MovieCategories = this.movieCategoryService.GetAll().OrderBy(e => e.Name)
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower(), Selected = postFilter.MovieCategory == e.Name.ToLower() })
+                .ToList();
+
+            this.ViewBag.Directors = this.directorService.GetAll().OrderBy(e => e.Name)
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower() })
+                .ToList();
+
+            this.ViewBag.Screenwriters = this.screenwriterService.GetAll().OrderBy(e => e.Name)
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower() })
+                .ToList();
+
+            this.ViewBag.Composers = this.composerService.GetAll().OrderBy(e => e.Name)
+                .Select(e => new SelectListItem { Text = e.Name, Value = e.Name.ToLower() })
+                .ToList();
+        }
+
+        private IQueryable<PostVM> FilterPosts(PostFilterVM filter, IQueryable<PostVM> query)
+        {
+            if (string.IsNullOrWhiteSpace(filter.OrderBy))
+            {
+                query = query.OrderBy(q => q.Movie.Name);
+            }
+            else
+            {
+                switch (filter.OrderBy.Trim().ToLower())
+                {
+                    case "alphabetical":
+                        {
+                            query = query.OrderBy(q => q.Movie.Name);
+                        }
+
+                        break;
+                    case "rating":
+                        {
+                            query = query.OrderBy(q => q.Movie.Ratings.Average(s => s.Rating.Score));
+                        }
+
+                        break;
+                    case "category":
+                        {
+                            query = query.OrderBy(q => q.Movie.Categories.First().Category.Name);
+                        }
+
+                        break;
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.MovieName))
+            {
+                query = query.Where(q => q.Movie.Name.ToLower().Contains(filter.MovieName.ToLower().Trim()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.MovieCategory))
+            {
+                query = query.Where(q => q.Movie.Categories.First().Category.Name.ToLower() == filter.MovieCategory);
+            }
+
+            return query;
         }
     }
 }

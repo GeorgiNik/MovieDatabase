@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
@@ -58,7 +57,7 @@
 
         public double ImdbRating { get; set; }
 
-        public MovieRatingVM Rating { get; set; }
+        public RatingVM Rating { get; set; }
 
         public List<MovieKeywordVM> Keywords { get; set; }
 

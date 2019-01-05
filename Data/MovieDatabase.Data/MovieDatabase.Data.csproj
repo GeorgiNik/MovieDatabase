@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20190104004500_changeRelationsMigration.cs" />
+    <Compile Remove="Migrations\20190104124834_migration.cs" />
   </ItemGroup>
 
   <ItemGroup>
