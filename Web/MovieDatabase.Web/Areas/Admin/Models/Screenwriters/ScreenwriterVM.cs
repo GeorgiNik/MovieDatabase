@@ -5,7 +5,7 @@ namespace MovieDatabase.Web.Areas.Admin.Models.Screenwriters
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
-    public class ScreenwriterVM : IMapFrom<Director>
+    public class ScreenwriterVM : IMapFrom<Screenwriter>
     {
         public string Id { get; set; }
 

@@ -1,8 +1,5 @@
 ﻿namespace MovieDatabase.Web.Areas.Admin.Controllers.Base
 {
-    using System;
-    using System.Linq;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using MovieDatabase.Common;
