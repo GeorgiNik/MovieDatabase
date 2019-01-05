@@ -18,6 +18,8 @@
 
         public static string PersonalData => "PersonalData";
 
+        public static string ManagePosts => "ManagePosts";
+
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
@@ -33,6 +35,8 @@
         public static string PersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, PersonalData);
 
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
+
+        public static string ManagePostsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ManagePosts);
 
         public static string PageNavClass(ViewContext viewContext, string page)
         {
