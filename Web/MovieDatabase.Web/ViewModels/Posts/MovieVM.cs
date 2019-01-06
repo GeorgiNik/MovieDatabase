@@ -45,6 +45,10 @@
 
         public double GivenUserRating { get; set; }
 
+        public bool IsInWishlist { get; set; }
+
+        public List<UserWishlistVM> UserWishlists { get; set; }
+
         public List<MovieKeywordVM> Keywords { get; set; }
     }
 }

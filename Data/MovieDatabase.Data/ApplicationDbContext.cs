@@ -124,12 +124,12 @@
             builder.Entity<UserWishlist>()
                 .HasOne(uw => uw.Movie)
                 .WithMany(p => p.UserWishlists)
-                .HasForeignKey(uw => uw.UserId);
+                .HasForeignKey(uw => uw.MovieId);
 
             builder.Entity<UserWishlist>()
                 .HasOne(uw => uw.User)
                 .WithMany(c => c.UserWishlists)
-                .HasForeignKey(pc => pc.MovieId);
+                .HasForeignKey(pc => pc.UserId);
 
             builder.Entity<UserWatchedMovie>()
                 .HasKey(uw => new { uw.UserId, uw.MovieId });
@@ -137,12 +137,12 @@
             builder.Entity<UserWatchedMovie>()
                 .HasOne(uw => uw.Movie)
                 .WithMany(p => p.UserWatchedMovies)
-                .HasForeignKey(uw => uw.UserId);
+                .HasForeignKey(uw => uw.MovieId);
 
             builder.Entity<UserWatchedMovie>()
                 .HasOne(uw => uw.User)
                 .WithMany(c => c.UserWatchedMovies)
-                .HasForeignKey(pc => pc.MovieId);
+                .HasForeignKey(pc => pc.UserId);
 
             builder.Entity<UserOwnedMovie>()
                .HasKey(uw => new { uw.UserId, uw.MovieId });
@@ -150,12 +150,12 @@
             builder.Entity<UserOwnedMovie>()
                 .HasOne(uw => uw.Movie)
                 .WithMany(p => p.UserOwnedMovies)
-                .HasForeignKey(uw => uw.UserId);
+                .HasForeignKey(uw => uw.MovieId);
 
             builder.Entity<UserOwnedMovie>()
                 .HasOne(uw => uw.User)
                 .WithMany(c => c.UserOwnedMovies)
-                .HasForeignKey(pc => pc.MovieId);
+                .HasForeignKey(pc => pc.UserId);
 
             builder.Entity<MovieCategory>()
                 .HasKey(bc => new { bc.MovieId, bc.CategoryId });

@@ -40,7 +40,15 @@
             <div class="col-xs-12 col-md-7">
                 <div class="movie-title">
                     <span class="movie-rating"><i class="fa fa-star"></i> <span class="rating-value">@Model.Movie.OverallRating.ToString("0.0")</span></span>
-                    @Model.Movie.Name
+                    @Model.Movie.Name (@Model.Movie.ReleaseDate.Year)
+                    @if (Model.Movie.IsInWishlist)
+                    {
+                        <a class="pull-right remove-from-wishlist" href="#"><i class="fa fa-heart"></i></a>
+                    }
+                    else
+                    {
+                        <a class="pull-right add-to-wishlist" href="#"><i class="fa fa-heart-o"></i></a>
+                    }
                     <span class="imdb-rating pull-right"><i class="fa fa-imdb"></i> @Model.Movie.ImdbRating.ToString("0.0")</span>
                 </div>
                 <div class="movie-category">
@@ -58,6 +66,8 @@
                     }
                 </div>
                 <div class="movie-meta mt">
+                    @Model.Movie.Duration / @Model.Movie.Country / @Model.Movie.Language / @Model.Movie.Studio
+                    <br />
                     Directed by @Model.Movie.Director.Name
                     <br />
                     Screenplay @Model.Movie.Screenwriter.Name
@@ -72,10 +82,19 @@
     </div>
 </div>
 
-<div class="panel panel-white mt post-panel col-xs-12 col-md-5">
+<div class="panel panel-white mt post-panel">
     <div class="panel-body">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-md-5">
+                <div class="section-heading text-center mb">Awards</div>
+                @foreach (var award in Model.Movie.Awards)
+                {
+                    <div class="cast-member text-center">
+                        <span class="">@award.Name</span>
+                    </div>
+                }
+            </div>
+            <div class="col-xs-12 col-md-offset-1 col-md-6">
                 <div class="section-heading text-center mb">Cast</div>
                 @foreach (var actor in Model.Movie.Actors)
                 {
@@ -89,9 +108,17 @@
     </div>
 </div>
 
+
+@section Styles {
+    <environment names="Development,Staging,Production">
+        <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    </environment>
+}
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <environment names="Development,Staging,Production">
+        <script src="~/lib/toastr/toastr.min.js"></script>
         <script src="~/js/common/rating.js"></script>
         <script src="~/js/posts/show-post.js"></script>
     </environment>
@@ -99,6 +126,8 @@
         (function (movieDbApp) {
             movieDbApp.showPostConfig = {
                 rateMovieUrl: '@Url.Action("RatePost", "Posts")',
+                addToWishlistUrl: '@Url.Action("AddToWishlist", "Posts")',
+                removeFromWishlistUrl: '@Url.Action("RemoveFromWishlist", "Posts")',
             }
 
             movieDbApp.ratingInit();

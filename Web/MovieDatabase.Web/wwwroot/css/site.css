@@ -383,6 +383,11 @@ select.md-input-control {
     width: 100%;
 }
 
+.post-panel .add-to-wishlist .fa, .post-panel .remove-from-wishlist .fa {
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
 .post-heading .post-meta {
     font-size: 1.2rem;
     font-style: italic;

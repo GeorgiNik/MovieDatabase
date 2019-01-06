@@ -174,6 +174,7 @@
 
             postModel.Movie.PosterImageRelativeLink = FileManager.GetRelativeFilePath(postModel.Movie.PosterImageLink);
             postModel.Movie.OverallRating = postModel.Movie.Ratings.Any() ? postModel.Movie.Ratings.Average(s => s.Rating.Score) : 0;
+            postModel.Movie.IsInWishlist = postModel.Movie.UserWishlists.Any(w => w.User.Id == userId);
 
             var currentUserRating = postModel.Movie.Ratings.Where(r => r.Rating.RatedBy.Id == userId).LastOrDefault()?.Rating.Score;
             postModel.Movie.GivenUserRating = currentUserRating.HasValue ? currentUserRating.Value : 0;
@@ -229,6 +230,62 @@
             }
 
             return this.BadRequest("invalid rating");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("posts/post/{postId}/add-to-wishlist")]
+        public async Task<IActionResult> AddToWishlist(string postId)
+        {
+            var post = this.postService.GetAll().Where(p => p.Id == postId)
+                .Include(p => p.Movie)
+                .ThenInclude(m => m.UserWishlists)
+                .FirstOrDefault();
+
+            if (post == null)
+            {
+                return this.NotFound("Post not found");
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+
+            bool hasInWishlist = post.Movie.UserWishlists.Any(w => w.UserId == userId);
+
+            if (!hasInWishlist)
+            {
+                post.Movie.UserWishlists.Add(new UserWishlist { UserId = userId });
+                await this.postService.Update(post);
+            }
+
+            return this.Json(new AlertVM { Success = true, Message = "Added to wishlist" });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("posts/post/{postId}/remove-from-wishlist")]
+        public async Task<IActionResult> RemoveFromWishlist(string postId)
+        {
+            var post = this.postService.GetAll().Where(p => p.Id == postId)
+                .Include(p => p.Movie)
+                .ThenInclude(m => m.UserWishlists)
+                .FirstOrDefault();
+
+            if (post == null)
+            {
+                return this.NotFound("Post not found");
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+
+            var userWishlistEntry = post.Movie.UserWishlists.Where(w => w.UserId == userId).FirstOrDefault();
+
+            if (userWishlistEntry != null)
+            {
+                post.Movie.UserWishlists.Remove(userWishlistEntry);
+                await this.postService.Update(post);
+            }
+
+            return this.Json(new AlertVM { Success = true, Message = "Removed from wishlist" });
         }
 
         [HttpPost]

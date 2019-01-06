@@ -3,11 +3,14 @@
     //Public Property
     movieDbApp.showPostConfig = {
         rateMovieUrl: '',
+        addToWishlistUrl: '',
+        removeFromWishlist: '',
     };
 
     //Public Method
     movieDbApp.init = function () {
         initRatedEvents();
+        initWishlistEvents();
     };
 
     //Private Method
@@ -26,6 +29,54 @@
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
             }
+        });
+    }
+
+    function addToWishlist() {
+        var postId = $("#postId").val();
+        var url = movieDbApp.showPostConfig.addToWishlistUrl;
+        var token = $('input[name="__RequestVerificationToken"]').val();
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: { __RequestVerificationToken: token, postId: postId},
+            success: function (data) {
+                if (data.success === true) {
+                    toastr.success(data.message);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function removeFromWishlist() {
+        var postId = $("#postId").val();
+        var url = movieDbApp.showPostConfig.removeFromWishlistUrl;
+        var token = $('input[name="__RequestVerificationToken"]').val();
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: { __RequestVerificationToken: token, postId: postId },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function initWishlistEvents() {
+        $('.add-to-wishlist').on('click', function () {
+            addToWishlist();
+        });
+
+        $('.remove-from-wishlist').on('click', function () {
+            removeFromWishlist();
         });
     }
 
