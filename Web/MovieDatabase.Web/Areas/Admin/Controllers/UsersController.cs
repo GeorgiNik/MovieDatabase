@@ -95,7 +95,7 @@
 
             IdentityResult result = await this.userManager.ActivateUserAsync(userId);
 
-            await this.postService.Delete(this.postService.GetAllWithDeleted().Where(p => p.UserId == userId));
+            await this.postService.Restore(this.postService.GetAllWithDeleted().Where(p => p.UserId == userId));
 
             this.AddAlert(true, "User account successfully activated");
 
@@ -114,7 +114,7 @@
 
             IdentityResult result = await this.userManager.DeactivateUserAsync(userId);
 
-            await this.postService.Restore(this.postService.GetAllWithDeleted().Where(p => p.UserId == userId));
+            await this.postService.Delete(this.postService.GetAllWithDeleted().Where(p => p.UserId == userId));
 
             this.AddAlert(true, "User account successfully deactivated");
 
