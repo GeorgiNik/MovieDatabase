@@ -108,7 +108,7 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
             // Application services
-            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ImdbService>();
             services.AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
