@@ -1,7 +1,46 @@
-﻿@{
+﻿@model ICollection<MovieDatabase.Web.ViewModels.MovieFestival>
+@{
     this.ViewData["Title"] = "Home";
 }
-
+@section Styles
+{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/components/item.min.css" asp-append-version="true"/>
+}
 <div class="page-intro">
-    <h2>Welcome to Movie database</h2>
+    <h2>Film festivals you might be interested in:</h2>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="ui divided items">
+                @{
+                    var i = 1;
+                }
+                @foreach (var festival in Model)
+                {
+                    i++;
+                    <div class="item">
+                        <div class="image">
+                            <img src="https://source.unsplash.com/random/180x180?sig=@i&film,festival">
+                        </div>
+                        <div class="content">
+                            <a class="header">@festival.Title</a>
+                            <div class="meta">
+                                <span>Description:</span>
+                            </div>
+                            <div class="description">
+                                @{
+                                    var substring = festival.Description.Substring(0, Math.Min(450, festival.Description.Length));
+                                }
+                                <p>@substring @(festival.Description.Length > 450 ? " ...": " ")</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
 </div>
