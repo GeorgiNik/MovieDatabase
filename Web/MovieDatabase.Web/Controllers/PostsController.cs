@@ -195,7 +195,7 @@
 
             this.AddAlert(true, "Successfully added post");
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", new PaginationVM { Page = 1, PageSize = 20 });
         }
 
         [Route("posts/post/{postId}")]
