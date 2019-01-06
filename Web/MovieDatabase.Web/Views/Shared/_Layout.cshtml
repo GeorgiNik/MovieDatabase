@@ -54,7 +54,7 @@
                 @await this.Html.PartialAsync("_LoginPartial")
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="#"><i class="icon fa fa-heart-o"></i> </a>
+                        <a asp-action="Wishlisted" asp-controller="Posts" asp-area="" asp-route-page="1" asp-route-pageSize="20"><i class="icon fa fa-heart-o"></i> </a>
                     </li>
                 </ul>
                 <!-- /Navigation Right -->

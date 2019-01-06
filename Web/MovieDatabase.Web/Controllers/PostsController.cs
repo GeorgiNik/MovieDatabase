@@ -92,6 +92,49 @@
         }
 
         [HttpGet]
+        [Route("posts/wishlisted")]
+        public IActionResult Wishlisted(PaginationVM pagination, PostFilterVM postFilter)
+        {
+            if (this.HasAlert)
+            {
+                this.SetAlertModel();
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+
+            var wishlistedPosts = this.postService.GetAll()
+                .Include(p => p.Movie)
+                .ThenInclude(m => m.UserWishlists)
+                .Where(m => m.Movie.UserWishlists.Any(w => w.UserId == userId));
+
+            var postsQuery = this.FilterPosts(postFilter, wishlistedPosts.ProjectTo<PostVM>());
+
+            var paginatedPosts = this.PaginateList<PostVM>(pagination, postsQuery).ToList();
+
+            foreach (var post in paginatedPosts)
+            {
+                post.Movie.PosterImageRelativeLink = FileManager.GetRelativeFilePath(post.Movie.PosterImageLink);
+                post.Movie.OverallRating = post.Movie.Ratings.Any() ? post.Movie.Ratings.Average(s => s.Rating.Score) : 0;
+            }
+
+            int totalPages = this.GetTotalPages(pagination.PageSize, postsQuery.Count());
+
+            PostListVM postListViewModel = new PostListVM
+            {
+                Posts = paginatedPosts,
+                NextPage = pagination.Page < totalPages ? pagination.Page + 1 : pagination.Page,
+                PreviousPage = pagination.Page > 1 ? pagination.Page - 1 : pagination.Page,
+                CurrentPage = pagination.Page,
+                TotalPages = totalPages,
+                ShowPagination = totalPages > 1,
+            };
+
+            this.LoadListMoviesDropdowns(postFilter);
+
+            return this.View("Index", postListViewModel);
+        }
+
+        [HttpGet]
         [Route("posts/create")]
         public IActionResult Create()
         {
