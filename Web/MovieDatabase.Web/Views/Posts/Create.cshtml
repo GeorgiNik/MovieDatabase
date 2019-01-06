@@ -7,7 +7,7 @@
 <partial name="_StatusMessage" model="ViewBag.Alert" />
 
 <div class="page-intro">
-    <h2>New post</h2>
+    <h2 class="text-center">Create New Post</h2>
 </div>
 
 <form class="form-custom" method="post" asp-controller="Posts" asp-action="Create" id="add-post-form" enctype="multipart/form-data">
@@ -20,7 +20,7 @@
             <div class="form-group row">
                 <div class="col-xs-12">
                     <div class="md-input">
-                        <label asp-for="Name" class="md-input-placeholder">Post title</label>
+                        <label asp-for="Name" class="md-input-placeholder">Post Title</label>
                         <input asp-for="Name" class="md-input-control">
                     </div>
                     <span asp-validation-for="Name" class="text-danger"></span>
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="md-input" role="wrapper">
-                        <label asp-for="Movie.ReleaseDate" class="md-input-placeholder">Release date</label>
+                        <label asp-for="Movie.ReleaseDate" class="md-input-placeholder">Release Date</label>
                         <input asp-for="Movie.ReleaseDate" class="md-input-control datepicker" type="text">
                     </div>
                     <span asp-validation-for="Movie.ReleaseDate" class="text-danger"></span>
@@ -198,8 +198,8 @@
             </div>
             <div class="form-group row ">
                 <div class="col-xs-12">
-                    <button type="button" class="btn btn-secondary btn-waves" id="actor-add-btn"><i class="fa fa-plus"></i> Add actor</button>
-                    <button type="button" class="btn btn-danger btn-waves hidden" id="actor-remove-btn"><i class="fa fa-minus"></i> Remove actor</button>
+                    <button type="button" class="btn btn-secondary btn-waves" id="actor-add-btn"><i class="fa fa-plus"></i> Add Actor</button>
+                    <button type="button" class="btn btn-danger btn-waves hidden" id="actor-remove-btn"><i class="fa fa-minus"></i> Remove Actor</button>
                 </div>
             </div>
 
@@ -216,15 +216,15 @@
             </div>
             <div class="form-group row">
                 <div class="col-xs-12">
-                    <button type="button" class="btn btn-secondary btn-waves" id="award-add-btn"><i class="fa fa-plus"></i> Add award</button>
-                    <button type="button" class="btn btn-danger btn-waves hidden" id="award-remove-btn"><i class="fa fa-minus"></i> Remove award</button>
+                    <button type="button" class="btn btn-secondary btn-waves" id="award-add-btn"><i class="fa fa-plus"></i> Add Award</button>
+                    <button type="button" class="btn btn-danger btn-waves hidden" id="award-remove-btn"><i class="fa fa-minus"></i> Remove Award</button>
                 </div>
             </div>
 
             <div class="form-group row mt-2x">
                 <div class="text-center">
                     <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
-                        Add post
+                        Add Post
                     </button>
                 </div>
             </div>
