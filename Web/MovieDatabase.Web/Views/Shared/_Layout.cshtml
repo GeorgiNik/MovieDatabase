@@ -25,6 +25,9 @@
         <link rel="stylesheet" href="~/theme/theme.min.css" title="theme-default" asp-append-version="true"/>
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
     </environment>
+    <!-- Start of moviedatabase Zendesk Widget script -->
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=6777a737-22cd-44b6-a647-c748ba553550"> </script>
+    <!-- End of moviedatabase Zendesk Widget script -->
     @this.RenderSection("Styles", required: false)
 </head>
 <body class="main-body">
@@ -86,7 +89,6 @@
     <div class="container body-content">
         @this.RenderBody()
     </div>
-
     <footer class="footer">
         <div class="footer-bottom-line bg-dark">
             <div class="container">
@@ -134,16 +136,16 @@
         <script src="~/theme/theme.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-    <script>
-        $(document).ready(function () {
-            $('#searchForm').on('keypress', function (e) {
-                if (e.keyCode == 13) {
-                    $(this).submit();
-                }
-            });
+<script>
+    $(document).ready(function () {
+        $('#searchForm').on('keypress', function (e) {
+            if (e.keyCode == 13) {
+                $(this).submit();
+            }
         });
-    </script>
+    });
+</script>
 
-    @this.RenderSection("Scripts", required: false)
+@this.RenderSection("Scripts", required: false)
 </body>
 </html>
