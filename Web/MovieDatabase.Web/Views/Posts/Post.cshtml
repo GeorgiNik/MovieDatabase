@@ -3,9 +3,29 @@
 @{
     this.ViewData["Title"] = Model.Name;
 }
-<div class="page-intro">
+<div class="page-intro post-heading">
     <h2>@Model.Name</h2>
+    <div class='rating-stars'>
+        <ul id='stars'>
+            <li class='star @(@Model.Movie.GivenUserRating >= 1 ? "selected" : "")' title='Poor' data-value='1'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 2 ? "selected" : "")' title='Fair' data-value='2'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 3 ? "selected" : "")' title='Good' data-value='3'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 4 ? "selected" : "")' title='Excellent' data-value='4'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+            <li class='star @(@Model.Movie.GivenUserRating >= 5 ? "selected" : "")' title='WOW!!!' data-value='5'>
+                <i class='fa fa-star fa-fw'></i>
+            </li>
+        </ul>
+    </div>
     <div class="post-meta text-right">
+        <input hidden id="postId" value="@Model.Id" />
         Posted by @Model.User.Firstname @Model.User.Lastname on @Model.CreatedOn.ToString("dd/MM/yyyy mm:hh")
     </div>
 </div>
@@ -19,7 +39,7 @@
             </div>
             <div class="col-xs-12 col-md-7">
                 <div class="movie-title">
-                    <span class="movie-rating"><i class="fa fa-star"></i> @Model.Movie.OverallRating.ToString("0.0")</span>
+                    <span class="movie-rating"><i class="fa fa-star"></i> <span class="rating-value">@Model.Movie.OverallRating.ToString("0.0")</span></span>
                     @Model.Movie.Name
                     <span class="imdb-rating pull-right"><i class="fa fa-imdb"></i> @Model.Movie.ImdbRating.ToString("0.0")</span>
                 </div>
@@ -69,5 +89,20 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <environment names="Development,Staging,Production">
+        <script src="~/js/common/rating.js"></script>
+        <script src="~/js/posts/show-post.js"></script>
+    </environment>
+    <script>
+        (function (movieDbApp) {
+            movieDbApp.showPostConfig = {
+                rateMovieUrl: '@Url.Action("RatePost", "Posts")',
+            }
+
+            movieDbApp.ratingInit();
+            movieDbApp.init();
+        })(window.movieDbApp);
+    </script>
 }

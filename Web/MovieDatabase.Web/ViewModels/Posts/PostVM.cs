@@ -12,6 +12,6 @@
 
         public DateTime CreatedOn { get; set; }
 
-        public PostAuthorVM User { get; set; }
+        public UserVM User { get; set; }
     }
 }

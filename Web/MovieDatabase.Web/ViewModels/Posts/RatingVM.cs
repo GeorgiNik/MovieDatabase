@@ -9,5 +9,7 @@
     {
         [Required(ErrorMessage = "Field is required")]
         public double Score { get; set; }
+
+        public UserVM RatedBy { get; set; }
     }
 }

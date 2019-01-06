@@ -43,6 +43,8 @@
 
         public double OverallRating { get; set; }
 
+        public double GivenUserRating { get; set; }
+
         public List<MovieKeywordVM> Keywords { get; set; }
     }
 }

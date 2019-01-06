@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -171,10 +170,65 @@
                 return this.NotFound("Post not found");
             }
 
+            var userId = this.userManager.GetUserId(this.User);
+
             postModel.Movie.PosterImageRelativeLink = FileManager.GetRelativeFilePath(postModel.Movie.PosterImageLink);
             postModel.Movie.OverallRating = postModel.Movie.Ratings.Any() ? postModel.Movie.Ratings.Average(s => s.Rating.Score) : 0;
 
+            var currentUserRating = postModel.Movie.Ratings.Where(r => r.Rating.RatedBy.Id == userId).LastOrDefault()?.Rating.Score;
+            postModel.Movie.GivenUserRating = currentUserRating.HasValue ? currentUserRating.Value : 0;
+
             return this.View(postModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("posts/post/{postId}/rate")]
+        public async Task<IActionResult> RatePost(string postId, int rating)
+        {
+            var post = this.postService.GetAll().Where(p => p.Id == postId)
+                .Include(p => p.Movie)
+                .ThenInclude(m => m.Ratings)
+                .ThenInclude(r => r.Rating)
+                .FirstOrDefault();
+
+            if (post == null)
+            {
+                return this.NotFound("Post not found");
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+
+            if (rating > 0 && rating <= 5)
+            {
+                var currentUserRating = post.Movie.Ratings.Where(r => r.Rating.RatedById == userId).LastOrDefault();
+
+                if (currentUserRating == null)
+                {
+                    post.Movie.Ratings.Add(new MovieRating
+                    {
+                        MovieId = post.MovieId,
+                        Rating = new Rating
+                        {
+                            RatedById = userId,
+                            Score = rating,
+                            RatedOn = DateTime.Now
+                        }
+                    });
+                }
+                else
+                {
+                    currentUserRating.Rating.Score = rating;
+                }
+
+                await this.postService.Update(post);
+
+                double overallRating = post.Movie.Ratings.Any() ? post.Movie.Ratings.Average(s => s.Rating.Score) : 0;
+
+                return this.Json(new { overallRating });
+            }
+
+            return this.BadRequest("invalid rating");
         }
 
         [HttpPost]

@@ -3,7 +3,7 @@
     using MovieDatabase.Common.Mapping;
     using MovieDatabase.Data.Models;
 
-    public class PostAuthorVM : IMapFrom<ApplicationUser>
+    public class UserVM : IMapFrom<ApplicationUser>
     {
         public string Firstname { get; set; }
 
