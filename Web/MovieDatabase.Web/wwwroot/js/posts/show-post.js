@@ -44,6 +44,7 @@
             success: function (data) {
                 if (data.success === true) {
                     toastr.success(data.message);
+                    $('.wishlist-buttons a').toggle()
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -62,7 +63,10 @@
             type: "post",
             data: { __RequestVerificationToken: token, postId: postId },
             success: function (data) {
-                console.log(data);
+                if (data.success === true) {
+                    toastr.success(data.message);
+                    $('.wishlist-buttons a').toggle();
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);

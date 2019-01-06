@@ -41,14 +41,10 @@
                 <div class="movie-title">
                     <span class="movie-rating"><i class="fa fa-star"></i> <span class="rating-value">@Model.Movie.OverallRating.ToString("0.0")</span></span>
                     @Model.Movie.Name (@Model.Movie.ReleaseDate.Year)
-                    @if (Model.Movie.IsInWishlist)
-                    {
-                        <a class="pull-right remove-from-wishlist" href="#"><i class="fa fa-heart"></i></a>
-                    }
-                    else
-                    {
-                        <a class="pull-right add-to-wishlist" href="#"><i class="fa fa-heart-o"></i></a>
-                    }
+                    <span class="wishlist-buttons">
+                        <a class="pull-right remove-from-wishlist" href="#" style="@(@Model.Movie.IsInWishlist ? "" : "display:none;")"><i class="fa fa-heart"></i></a>
+                        <a class="pull-right add-to-wishlist" href="#" style="@(@Model.Movie.IsInWishlist ? "display:none;" : "")"><i class="fa fa-heart-o"></i></a>
+                    </span>
                     <span class="imdb-rating pull-right"><i class="fa fa-imdb"></i> @Model.Movie.ImdbRating.ToString("0.0")</span>
                 </div>
                 <div class="movie-category">
