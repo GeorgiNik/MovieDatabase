@@ -2,15 +2,6 @@
 {
     using System.Reflection;
 
-    using MovieDatabase.Common.Mapping;
-    using MovieDatabase.Data;
-    using MovieDatabase.Data.Common.Repositories;
-    using MovieDatabase.Data.Models;
-    using MovieDatabase.Data.Repositories;
-    using MovieDatabase.Data.Seeding;
-    using MovieDatabase.Services.Messaging;
-    using MovieDatabase.Web.ViewModels.Account;
-
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -21,9 +12,20 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+
+    using MovieDatabase.Common.Mapping;
     using MovieDatabase.Common.Settings;
-    using MovieDatabase.Services.Messaging.EmailSender;
+    using MovieDatabase.Data;
+    using MovieDatabase.Data.Common.Repositories;
+    using MovieDatabase.Data.Models;
+    using MovieDatabase.Data.Repositories;
+    using MovieDatabase.Data.Seeding;
+    using MovieDatabase.Services.Contracts;
     using MovieDatabase.Services.Identity;
+    using MovieDatabase.Services.Implementation;
+    using MovieDatabase.Services.Messaging.EmailSender;
+    using MovieDatabase.Services.Utils;
+    using MovieDatabase.Web.ViewModels.Account;
 
     public class Startup
     {
@@ -40,7 +42,10 @@
             // Framework services
             // TODO: Add pooling when this bug is fixed: https://github.com/aspnet/EntityFrameworkCore/issues/9741
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+                options =>
+                {
+                    options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection"));
+                });
 
             services
                 .AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -88,8 +93,14 @@
                     options.MinimumSameSitePolicy = SameSiteMode.Lax;
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
-            
+
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = System.TimeSpan.FromHours(1);
+            });
+
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.Configure<ImdbServiceSettings>(configuration.GetSection("ImdbServiceSettings"));
             services.AddSingleton(this.configuration);
 
             // Data repositories
@@ -98,6 +109,8 @@
 
             // Application services
             services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<ImdbService>();
+            services.AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
@@ -109,17 +122,15 @@
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(LoginViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(LoginViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                if (env.IsDevelopment())
-                {
-                    dbContext.Database.Migrate();
-                }
+                dbContext.Database.Migrate();
 
                 ApplicationDbContextSeeder.Seed(dbContext, serviceScope.ServiceProvider);
             }

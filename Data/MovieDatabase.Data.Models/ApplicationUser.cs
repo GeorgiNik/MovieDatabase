@@ -1,21 +1,18 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
+
 namespace MovieDatabase.Data.Models
 {
     using System;
     using System.Collections.Generic;
 
-    using MovieDatabase.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using MovieDatabase.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Roles = new HashSet<IdentityUserRole<string>>();
-            this.Claims = new HashSet<IdentityUserClaim<string>>();
-            this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
         public string Firstname { get; set; }
@@ -23,6 +20,8 @@ namespace MovieDatabase.Data.Models
         public string Lastname { get; set; }
 
         public bool IsActive { get; set; }
+
+        public DateTimeOffset EmailConfirmationTokenResentOn { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }
@@ -34,10 +33,22 @@ namespace MovieDatabase.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserRole<string>>();
 
-        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
+        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; } = new HashSet<IdentityUserClaim<string>>();
 
-        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; } = new List<IdentityUserLogin<string>>();
+
+        public virtual ICollection<UserWishlist> UserWishlists { get; set; } = new HashSet<UserWishlist>();
+        
+        public virtual ICollection<UserWatchedMovie> UserWatchedMovies { get; set; } = new HashSet<UserWatchedMovie>();
+        
+        public virtual ICollection<UserOwnedMovie> UserOwnedMovies { get; set; } = new HashSet<UserOwnedMovie>();
+
+        public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+        
+        public virtual ICollection<EventParticipant> Events { get; set; } = new List<EventParticipant>();
+
+        public virtual ICollection<UserRating> UserRatings { get; set; } = new HashSet<UserRating>();
     }
 }

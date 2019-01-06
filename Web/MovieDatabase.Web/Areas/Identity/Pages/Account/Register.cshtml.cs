@@ -52,6 +52,15 @@
             // returnUrl = returnUrl ?? this.Url.Content("~/");
             if (this.ModelState.IsValid)
             {
+                var existingUser = await this.userManager.FindByEmailAsync(this.Input.Email);
+
+                if (existingUser != null)
+                {
+                    this.ModelState.AddModelError(string.Empty, "Email is already taken");
+
+                    return this.Page();
+                }
+
                 var user = new ApplicationUser
                 {
                     UserName = this.Input.Email,
@@ -66,9 +75,9 @@
                 };
 
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
-                result = await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
+                var roleResult = await this.userManager.AddToRoleAsync(user, GlobalConstants.UserRoleName);
 
-                if (result.Succeeded)
+                if (result.Succeeded && roleResult.Succeeded)
                 {
                     this.logger.LogInformation("User created a new account with password.");
 
@@ -90,10 +99,7 @@
                         "/ThankYouForRegistering", new { userId = user.Id });
                 }
 
-                foreach (var error in result.Errors)
-                {
-                    this.ModelState.AddModelError(string.Empty, error.Description);
-                }
+                this.ModelState.AddModelError(string.Empty, "An error was encountered while registering your account. Please try again.");
             }
 
             // If we got this far, something failed, redisplay form

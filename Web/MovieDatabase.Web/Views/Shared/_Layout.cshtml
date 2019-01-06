@@ -7,30 +7,77 @@
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/theme/components/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/theme/components/elegant-font/style.css" />
+        <link rel="stylesheet" href="~/theme/owl-carousel.css" />
+        <link rel="stylesheet" href="~/theme/jquery.mCustomScrollbar.css" />
+        <link rel="stylesheet" href="~/theme/theme-waves.css" />
+        <link rel="stylesheet" href="~/theme/theme.css" title="theme-default" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/components/font-awesome/css/font-awesome.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/components/elegant-font/style.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/owl-carousel.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/jquery.mCustomScrollbar.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/theme-waves.min.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/theme/theme.min.css" title="theme-default" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
     </environment>
+    @this.RenderSection("Styles", required: false)
 </head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+<body class="main-body">
+    <nav class="navbar navbar-theme navbar-fixed-top">
+        <div class="container-fluid">
+
+            <!-- Navbar Header -->
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Movie Database</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/img/md_logo_white.png" alt="MovieDatabase" />
+                </a>
             </div>
-            <div class="navbar-collapse collapse">
+            <!-- /Navbar Header -->
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="main-navbar">
+
+                <!-- Navigation -->
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-action="Create" asp-controller="Posts">New post</a></li>
+                    <li><a asp-area="" asp-action="Index" asp-controller="Posts" asp-route-page="1" asp-route-pageSize="20">Posts</a></li>
+                    <li><a href="#">Events</a></li>
+                </ul>
+                <!-- /Navigation -->
+                <!-- Navigation Right -->
                 @await this.Html.PartialAsync("_LoginPartial")
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a asp-action="Wishlisted" asp-controller="Posts" asp-area="" asp-route-page="1" asp-route-pageSize="20"><i class="icon fa fa-heart-o"></i> </a>
+                    </li>
+                </ul>
+                <!-- /Navigation Right -->
+                <!-- Search Form -->
+                <form id="searchForm" class="navbar-form navbar-form-toggleable navbar-right" method="get" asp-action="Index" asp-controller="Posts">
+                    <div class="navbar-form-toggle-content">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search" name="movieName">
+                            <input hidden name="page" value="1" />
+                            <input hidden name="pageSize" value="20" />
+                        </div>
+                    </div>
+                    <button class="btn btn-primary-dark btn-waves btn-icon navbar-form-toggle waves-effect waves-light"><i class="icon fa fa-search"></i> </button>
+                </form>
+                <!-- /Search Form -->
+
             </div>
+            <!-- /Navbar Content -->
+
         </div>
     </nav>
 
@@ -38,32 +85,64 @@
 
     <div class="container body-content">
         @this.RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - MovieDatabase.Web</p>
-        </footer>
     </div>
+
+    <footer class="footer">
+        <div class="footer-bottom-line bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="links">
+                            <a href="#">About us</a> /
+                            <a href="#">Terms and conditions</a> /
+                            <a href="#">Privacy policy</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="links">
+                            <a href="#"><i class="icon fa fa-facebook"></i></a>
+                            <a href="#"><i class="icon fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <p class="copyright no-margin">
+                            &copy; 2018 - MovieDatabase
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/theme/theme.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+        <script src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery"
                 crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+                >
         </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
                 crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        >
         </script>
+        <script src="~/theme/theme.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+    <script>
+        $(document).ready(function () {
+            $('#searchForm').on('keypress', function (e) {
+                if (e.keyCode == 13) {
+                    $(this).submit();
+                }
+            });
+        });
+    </script>
 
     @this.RenderSection("Scripts", required: false)
 </body>

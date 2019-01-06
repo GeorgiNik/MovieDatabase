@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using MovieDatabase.Common;
-
-namespace MovieDatabase.Web.Areas.Admin.Controllers
+﻿namespace MovieDatabase.Web.Areas.Admin.Controllers
 {
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
-    public class DashboardController : Controller
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using MovieDatabase.Common;
+    using MovieDatabase.Web.Areas.Admin.Controllers.Base;
+
+    public class DashboardController : BaseController
     {
         public IActionResult Index()
         {

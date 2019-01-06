@@ -10,6 +10,7 @@
     using MovieDatabase.Web.ViewModels.Settings;
 
     using Microsoft.AspNetCore.Mvc;
+    using MovieDatabase.Web.Controllers.Base;
 
     public class SettingsController : BaseController
     {

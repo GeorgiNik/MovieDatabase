@@ -24,14 +24,20 @@
             }
 
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-            Seed(dbContext, roleManager);
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            Seed(dbContext, userManager, roleManager);
         }
 
-        public static void Seed(ApplicationDbContext dbContext, RoleManager<ApplicationRole> roleManager)
+        public static void Seed(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
         {
             if (dbContext == null)
             {
                 throw new ArgumentNullException(nameof(dbContext));
+            }
+
+            if (userManager == null)
+            {
+                throw new ArgumentNullException(nameof(userManager));
             }
 
             if (roleManager == null)
@@ -40,6 +46,36 @@
             }
 
             SeedRoles(roleManager);
+            //SeedAdmin(userManager);
+        }
+
+        private static void SeedAdmin(UserManager<ApplicationUser> userManager)
+        {
+            ApplicationUser admin = new ApplicationUser
+            {
+                Firstname = "System",
+                Lastname = "Administrator",
+                Email = "admin@admin.com",
+                UserName = "admin@admin.com",
+                EmailConfirmed = true,
+                IsActive = true,
+                CreatedOn = DateTime.Now,
+                ModifiedOn = DateTime.Now,
+            };
+
+            var result = userManager.CreateAsync(admin, "123456").GetAwaiter().GetResult();
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+            }
+
+            var roleResult = userManager.AddToRoleAsync(admin, GlobalConstants.AdministratorRoleName).GetAwaiter().GetResult();
+
+            if (!roleResult.Succeeded)
+            {
+                throw new Exception(string.Join(Environment.NewLine, roleResult.Errors.Select(e => e.Description)));
+            }
         }
 
         private static void SeedRoles(RoleManager<ApplicationRole> roleManager)

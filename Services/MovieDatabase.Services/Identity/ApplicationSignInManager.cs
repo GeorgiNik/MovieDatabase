@@ -25,16 +25,16 @@
         {
         }
 
-        public override Task<SignInResult> PasswordSignInAsync(string userName, string password, bool rememberMe, bool lockoutOnFailure)
+        public override async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool rememberMe, bool lockoutOnFailure)
         {
-            var user = this.UserManager.FindByEmailAsync(userName).Result;
+            var user = await this.UserManager.FindByEmailAsync(userName);
 
-            if (!user.IsActive || user.IsDeleted)
+            if (user == null || !user.IsActive || user.IsDeleted)
             {
-                return Task.FromResult(SignInResult.NotAllowed);
+                return SignInResult.NotAllowed;
             }
 
-            return this.PasswordSignInAsync(user, password, rememberMe, lockoutOnFailure: lockoutOnFailure);
+            return await this.PasswordSignInAsync(user, password, rememberMe, lockoutOnFailure: lockoutOnFailure);
         }
     }
 }

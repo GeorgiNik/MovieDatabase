@@ -2,7 +2,7 @@ namespace MovieDatabase.Common.Settings
 {
     public class EmailSettings
     {
-        public string ApiAdress { get; set; }
+        public string ApiAddress { get; set; }
 
         public string FromName { get; set; }
 

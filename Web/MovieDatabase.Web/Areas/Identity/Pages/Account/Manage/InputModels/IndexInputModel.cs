@@ -4,12 +4,14 @@
 
     public class IndexInputModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
         [Phone]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Phone")]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        public string Firstname { get; set; }
+
+        [Required]
+        public string Lastname { get; set; }
     }
 }
