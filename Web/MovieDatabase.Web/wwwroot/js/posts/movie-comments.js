@@ -41,6 +41,10 @@
 
                     $('.comments-box').prepend($newComment);
                     $('#newComment').val('');
+
+                    if ($('.empty-comment').length) {
+                        $('.empty-comment').hide();
+                    }
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
