@@ -166,6 +166,18 @@ body.main-body {
         }
 }
 
+@media(min-width:768px) {
+    body.admin-body {
+        padding-left: 90px;
+    }
+}
+
+@media(min-width:1200px) {
+    body.admin-body.dashb-01-expanded {
+        padding-left: 250px;
+    }
+}
+
 .widget.user-profile-widget {
     border-left: 4px solid transparent;
 }
@@ -401,3 +413,48 @@ select.md-input-control {
 .post-heading .rating-stars ul > li.star > i.fa {
     font-size: 2.5rem;
 }
+
+.text-large {
+    font-size: 1.5rem;
+}
+
+.comment-author {
+    font-size: 1.44rem;
+}
+
+.comment-date {
+    font-size: 11px;
+    font-style: italic;
+    position: relative;
+    /*top: -1px;*/
+    margin-left: 4px;
+}
+
+.comment-text {
+    font-size: 1.5rem;
+}
+
+.fb-share-button {
+    bottom: 7px;
+}
+
+.events.ui.divided.items {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center
+}
+
+    .events.ui.divided.items .item {
+        background: #fff;
+        -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 12px 0 rgba(0, 0, 0, 0.09);
+        -moz-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 12px 0 rgba(0, 0, 0, 0.09);
+        box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.12), 0 3px 12px 0 rgba(0, 0, 0, 0.09);
+        background-color: white;
+        padding: 15px 30px !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .events.ui.divided.items > .item:first-child, .events.ui.divided.items > .item:last-child {
+        padding: 15px 30px !important;
+    }

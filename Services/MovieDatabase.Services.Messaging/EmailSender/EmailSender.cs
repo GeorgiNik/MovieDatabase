@@ -47,7 +47,7 @@
             {
                 using (var emailForSending = new MailMessage())
                 {
-                    emailForSending.To.Add(new MailAddress(email));
+                    emailForSending.To.Add(new MailAddress(email, "MovieDatabase Team"));
                     emailForSending.From = new MailAddress(this.settings.FromEmail);
                     emailForSending.Subject = subject;
                     emailForSending.Body = message;
