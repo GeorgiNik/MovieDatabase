@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using MovieDatabase.Common;
-    using MovieDatabase.Web.Areas.Admin.Models;
+    using MovieDatabase.Web.ViewModels;
 
     [Authorize]
     public class BaseController : Controller

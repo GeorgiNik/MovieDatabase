@@ -4,108 +4,110 @@
     this.ViewData["Title"] = "Posts";
 }
 
-<form class="form-custom" method="get" asp-controller="Posts" asp-action="Index" id="filter-form">
-    <div class="panel panel-white">
-        <div class="panel-body">
+<div class="row">
+    <form class="form-custom col-xs-12" method="get" asp-controller="Posts" asp-action="Index" id="filter-form">
+        <div class="panel panel-white">
+            <div class="panel-body">
 
-            <input type="hidden" name="page" value="@Model.CurrentPage" />
-            <div class="form-group row">
-                <div class="col-xs-12 col-md-3">
-                    <div class="md-input">
-                        <label for="movieName" class="md-input-placeholder">Movie name</label>
-                        <input type="text" id="movieName" name="movieName" class="md-input-control" value="@Context.Request.Query["movieName"]">
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-3">
-                    <div class="md-input">
-                        <label for="movieCategory" class="md-input-placeholder">Movie category</label>
-                        <select name="movieCategory" asp-items="ViewBag.MovieCategories" class="md-input-control">
-                            <option value=" ">All</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-xs-12 text-left toggle">
-                    <a href="#" class="toggle-advanced-search open-panel">Advanced search <i class="fa fa-caret-right"></i></a>
-                    <a href="#" class="toggle-advanced-search close-panel" style="display:none;">Advanced search <i class="fa fa-caret-down"></i></a>
-                </div>
-            </div>
-
-            <div class="advanced-search" style="display:none;">
+                <input type="hidden" name="page" value="@Model.CurrentPage" />
                 <div class="form-group row">
                     <div class="col-xs-12 col-md-3">
                         <div class="md-input">
-                            <label for="keyword" class="md-input-placeholder">Keyword</label>
-                            <input type="text" id="keyword" name="keyword" class="md-input-control" value="@Context.Request.Query["keyword"]">
+                            <label for="movieName" class="md-input-placeholder">Movie name</label>
+                            <input type="text" id="movieName" name="movieName" class="md-input-control" value="@Context.Request.Query["movieName"]">
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-3">
                         <div class="md-input">
-                            <label for="ratingAbove" class="md-input-placeholder">Rating above</label>
-                            <select name="ratingAbove" asp-items="ViewBag.Ratings" class="md-input-control">
+                            <label for="movieCategory" class="md-input-placeholder">Movie category</label>
+                            <select name="movieCategory" asp-items="ViewBag.MovieCategories" class="md-input-control">
                                 <option value=" ">All</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-3">
-                        <div class="md-input">
-                            <label for="movieDirector" class="md-input-placeholder">Movie director</label>
-                            <select name="movieDirector" asp-items="ViewBag.Directors" class="md-input-control">
-                                <option value=" ">All</option>
-                            </select>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xs-12 text-left toggle">
+                        <a href="#" class="toggle-advanced-search open-panel">Advanced search <i class="fa fa-caret-right"></i></a>
+                        <a href="#" class="toggle-advanced-search close-panel" style="display:none;">Advanced search <i class="fa fa-caret-down"></i></a>
+                    </div>
+                </div>
+
+                <div class="advanced-search" style="display:none;">
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-md-3">
+                            <div class="md-input">
+                                <label for="keyword" class="md-input-placeholder">Keyword</label>
+                                <input type="text" id="keyword" name="keyword" class="md-input-control" value="@Context.Request.Query["keyword"]">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <div class="md-input">
+                                <label for="ratingAbove" class="md-input-placeholder">Rating above</label>
+                                <select name="ratingAbove" asp-items="ViewBag.Ratings" class="md-input-control">
+                                    <option value=" ">All</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <div class="md-input">
+                                <label for="movieDirector" class="md-input-placeholder">Movie director</label>
+                                <select name="movieDirector" asp-items="ViewBag.Directors" class="md-input-control">
+                                    <option value=" ">All</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-3">
+                            <div class="md-input">
+                                <label for="movieScreenwriter" class="md-input-placeholder">Movie screenwriter</label>
+                                <select name="movieScreenwriter" asp-items="ViewBag.Screenwriters" class="md-input-control">
+                                    <option value=" ">All</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-md-3">
-                        <div class="md-input">
-                            <label for="movieScreenwriter" class="md-input-placeholder">Movie screenwriter</label>
-                            <select name="movieScreenwriter" asp-items="ViewBag.Screenwriters" class="md-input-control">
-                                <option value=" ">All</option>
-                            </select>
+
+                    <div class="form-group row">
+                        <div class="col-xs-12 col-md-3">
+                            <div class="md-input">
+                                <label for="movieComposer" class="md-input-placeholder">Movie composer</label>
+                                <select name="movieComposer" asp-items="ViewBag.Composers" class="md-input-control">
+                                    <option value=" ">All</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <div class="col-xs-12 col-md-3">
-                        <div class="md-input">
-                            <label for="movieComposer" class="md-input-placeholder">Movie composer</label>
-                            <select name="movieComposer" asp-items="ViewBag.Composers" class="md-input-control">
-                                <option value=" ">All</option>
-                            </select>
-                        </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
+                            Filter
+                        </button>
                     </div>
                 </div>
+
             </div>
-            
-            <div class="form-group row">
-                <div class="text-right">
-                    <button type="submit" class="btn btn-waves btn-primary waves-effect waves-light">
-                        Filter
-                    </button>
-                </div>
+        </div>
+
+        <div class="text-right mb-0p5">
+            <div class="md-input input-inline">
+                <label for="orderBy" class="md-input-placeholder">Order by</label>
+                <select name="orderBy" asp-items="ViewBag.OrderBy" class="md-input-control" onchange="$('#filter-form').submit()"></select>
+            </div>
+            <div class="md-input input-inline">
+                <label for="pageSize" class="md-input-placeholder">Show</label>
+                <select id="pageSize" name="pageSize" class="md-input-control" onchange="$('#filter-form').submit()">
+                    <option value="10" selected="@(Context.Request.Query["pageSize"] == "10" ? "selected" : null)">10</option>
+                    <option value="20" selected="@(Context.Request.Query["pageSize"] == "20" ? "selected" : null)">20</option>
+                    <option value="30" selected="@(Context.Request.Query["pageSize"] == "30" ? "selected" : null)">30</option>
+                </select>
             </div>
 
         </div>
-    </div>
 
-    <div class="text-right mb-0p5">
-        <div class="md-input input-inline">
-            <label for="orderBy" class="md-input-placeholder">Order by</label>
-            <select name="orderBy" asp-items="ViewBag.OrderBy" class="md-input-control" onchange="$('#filter-form').submit()"></select>
-        </div>
-        <div class="md-input input-inline">
-            <label for="pageSize" class="md-input-placeholder">Show</label>
-            <select id="pageSize" name="pageSize" class="md-input-control" onchange="$('#filter-form').submit()">
-                <option value="10" selected="@(Context.Request.Query["pageSize"] == "10" ? "selected" : null)">10</option>
-                <option value="20" selected="@(Context.Request.Query["pageSize"] == "20" ? "selected" : null)">20</option>
-                <option value="30" selected="@(Context.Request.Query["pageSize"] == "30" ? "selected" : null)">30</option>
-            </select>
-        </div>
-
-    </div>
-
-</form>
+    </form>
+</div>
 
 @if (Model.Posts.Count == 0)
 {
@@ -231,7 +233,7 @@
     </nav>
 }
 
-@section Scripts{ 
+@section Scripts{
     <script>
         $(document).ready(function () {
 
