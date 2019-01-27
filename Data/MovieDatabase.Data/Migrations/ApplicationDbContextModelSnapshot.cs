@@ -289,6 +289,8 @@ namespace MovieDatabase.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AuthorId");
+
                     b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
@@ -303,11 +305,13 @@ namespace MovieDatabase.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorId");
+
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("MovieDatabase.Data.Models.Composer", b =>
@@ -763,6 +767,10 @@ namespace MovieDatabase.Data.Migrations
 
             modelBuilder.Entity("MovieDatabase.Data.Models.Comment", b =>
                 {
+                    b.HasOne("MovieDatabase.Data.Models.ApplicationUser", "Author")
+                        .WithMany("Comments")
+                        .HasForeignKey("AuthorId");
+
                     b.HasOne("MovieDatabase.Data.Models.Movie", "Movie")
                         .WithMany("Comments")
                         .HasForeignKey("MovieId");

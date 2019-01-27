@@ -25,6 +25,13 @@
         </ul>
     </div>
     <div class="post-meta text-right">
+        <div class="pull-left fb-share-button">
+            <!-- share button code -->
+            <div class="fb-share-button"
+                 data-href="http://moviedatabasenbu.azurewebsites.net/"
+                 data-layout="button_count">
+            </div>
+        </div>
         <input hidden id="postId" value="@Model.Id" />
         Posted by @Model.User.Firstname @Model.User.Lastname on @Model.CreatedOn.ToString("dd/MM/yyyy mm:hh")
     </div>
@@ -104,6 +111,10 @@
     </div>
 </div>
 
+<partial name="_MovieComments" model="Model.Movie.Comments.OrderByDescending(c=>c.CreatedOn).ToList()" />
+
+
+<div id="fb-root"></div>
 
 @section Styles {
     <environment names="Development,Staging,Production">
@@ -117,6 +128,7 @@
         <script src="~/lib/toastr/toastr.min.js"></script>
         <script src="~/js/common/rating.js"></script>
         <script src="~/js/posts/show-post.js"></script>
+        <script src="~/js/posts/movie-comments.js"></script>
     </environment>
     <script>
         (function (movieDbApp) {
@@ -126,8 +138,23 @@
                 removeFromWishlistUrl: '@Url.Action("RemoveFromWishlist", "Posts")',
             }
 
+             movieDbApp.movieCommentsConfig = {
+                    addCommentUrl: '@Url.Action("AddComment", "Posts")',
+            }
+
             movieDbApp.ratingInit();
+            movieDbApp.commentsInit();
             movieDbApp.init();
-        })(window.movieDbApp);
+
+    })(window.movieDbApp);
+
+    //Load Facebook SDK for JavaScript
+     (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
     </script>
 }

@@ -50,5 +50,7 @@
         public List<UserWishlistVM> UserWishlists { get; set; }
 
         public List<MovieKeywordVM> Keywords { get; set; }
+
+        public List<CommentVM> Comments { get; set; }
     }
 }

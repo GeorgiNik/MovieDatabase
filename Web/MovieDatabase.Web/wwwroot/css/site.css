@@ -401,3 +401,27 @@ select.md-input-control {
 .post-heading .rating-stars ul > li.star > i.fa {
     font-size: 2.5rem;
 }
+
+.text-large {
+    font-size: 1.5rem;
+}
+
+.comment-author {
+    font-size: 1.44rem;
+}
+
+.comment-date {
+    font-size: 11px;
+    font-style: italic;
+    position: relative;
+    /*top: -1px;*/
+    margin-left: 4px;
+}
+
+.comment-text {
+    font-size: 1.5rem;
+}
+
+.fb-share-button {
+    bottom: 7px;
+}

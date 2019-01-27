@@ -46,7 +46,9 @@ namespace MovieDatabase.Data.Models
         public virtual ICollection<UserOwnedMovie> UserOwnedMovies { get; set; } = new HashSet<UserOwnedMovie>();
 
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
-        
+
+        public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+
         public virtual ICollection<EventParticipant> Events { get; set; } = new List<EventParticipant>();
 
         public virtual ICollection<UserRating> UserRatings { get; set; } = new HashSet<UserRating>();

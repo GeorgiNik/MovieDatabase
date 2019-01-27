@@ -333,6 +333,44 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("posts/post/{postId}/comment-post")]
+        public async Task<IActionResult> AddComment(string postId, string commentText)
+        {
+            var post = this.postService.GetAll().Where(p => p.Id == postId)
+                .Include(p => p.Movie)
+                .ThenInclude(m => m.Comments)
+                .FirstOrDefault();
+
+            if (post == null)
+            {
+                return this.NotFound("Post not found");
+            }
+
+            var userId = this.userManager.GetUserId(this.User);
+
+            if (!string.IsNullOrWhiteSpace(commentText))
+            {
+                var comment = new Comment { AuthorId = userId, Name = commentText };
+                post.Movie.Comments.Add(comment);
+                await this.postService.Update(post);
+
+                var user = await this.userManager.GetUserAsync(this.User);
+                return this.Json(new
+                {
+                    comment = comment.Name,
+                    createdOn = comment.CreatedOn.ToString("dd/MM/yy HH:mm"),
+                    author = user.Firstname + " " + user.Lastname,
+                    alert = new AlertVM { Success = true, Message = "Comment posted" }
+                });
+            }
+            else
+            {
+                return this.BadRequest("Invalid comment text");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("posts/get-imdb-rating")]
         public IActionResult GetMovieImdbRating(string title)
         {
