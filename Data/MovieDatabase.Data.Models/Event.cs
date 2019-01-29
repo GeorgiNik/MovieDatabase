@@ -16,6 +16,11 @@ namespace MovieDatabase.Data.Models
 
         public string MovieId { get; set; }
 
+        public string OwnerId { get; set; }
+
+        [ForeignKey(nameof(OwnerId))]
+        public ApplicationUser Owner { get; set; }
+
         [ForeignKey(nameof(MovieId))]
         public Movie Movie { get; set; }
 
